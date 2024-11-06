@@ -1,11 +1,11 @@
-package com.encora.searchflights.dto;
+package com.encora.searchflights.model;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-class AirlineInfoDTO {
+public class AirlineInfo {
     private String name;
     private String code;
 }

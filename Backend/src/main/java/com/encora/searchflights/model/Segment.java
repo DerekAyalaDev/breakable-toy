@@ -1,4 +1,4 @@
-package com.encora.searchflights.dto;
+package com.encora.searchflights.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,13 +7,12 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class SegmentDTO {
-
+public class Segment {
     private LocalDateTime departureDateTime;
     private LocalDateTime arrivalDateTime;
-    private AirlineInfoDTO airline;
-    private AirlineInfoDTO operatingAirline;
+    private AirlineInfo airline;
+    private AirlineInfo operatingAirline;
     private String flightNumber;
     private String aircraftType;
-    private FareDetailDTO fareDetail;
+    private FareDetail fareDetail;
 }

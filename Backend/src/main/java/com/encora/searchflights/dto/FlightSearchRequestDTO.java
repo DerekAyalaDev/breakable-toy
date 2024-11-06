@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class FlightSearchRequestDTO {
-
     @NotBlank(message = "Departure airport code is required")
     private String departureAirportCode;
 

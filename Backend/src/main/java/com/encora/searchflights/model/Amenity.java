@@ -1,11 +1,11 @@
-package com.encora.searchflights.dto;
+package com.encora.searchflights.model;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class AmenityDTO {
+public class Amenity {
     private String name;
     private boolean isChargeable;
 }
