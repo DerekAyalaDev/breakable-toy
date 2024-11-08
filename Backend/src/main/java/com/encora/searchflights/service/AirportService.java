@@ -1,9 +1,10 @@
 package com.encora.searchflights.service;
 
-import com.encora.searchflights.model.AirportInfo;
+import com.encora.searchflights.model.airport.AirportInfo;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 public interface AirportService {
-    List<AirportInfo> searchAirportsByName(String keyword);
+    Mono<List<AirportInfo>> searchAirportsByName(String keyword);
 }
