@@ -42,7 +42,8 @@ public class AirportServiceImpl implements AirportService {
                 .uri(uriBuilder -> uriBuilder
                         .path("/v1/reference-data/locations")
                         .queryParam("subType", "AIRPORT")
-                        .queryParam("iataCode", iataCode)
+                        .queryParam("keyword", iataCode)
+                        .queryParam("page[limit]", 1)
                         .build())
                 .header("Authorization", "Bearer " + token)
                 .retrieve()
