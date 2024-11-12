@@ -33,4 +33,26 @@ public class AirportServiceImpl implements AirportService {
                         .flatMapIterable(AirportResponse::getData))
                 .collectList();
     }
+
+    @Override
+    public AirportInfo getAirportByIataCode(String iataCode) {
+        String token = webClientConfig.getAccessToken().block();
+
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/v1/reference-data/locations")
+                        .queryParam("subType", "AIRPORT")
+                        .queryParam("iataCode", iataCode)
+                        .build())
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .bodyToMono(AirportResponse.class)
+                .flatMap(response -> {
+                    if (response.getData() != null && !response.getData().isEmpty()) {
+                        return Mono.just(response.getData().get(0));
+                    }
+                    return Mono.empty();
+                })
+                .block();
+    }
 }
