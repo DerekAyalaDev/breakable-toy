@@ -13,10 +13,17 @@ public class AirportInfo {
     @JsonProperty("iataCode")
     private String iataCode; // IATA code
 
-    @JsonProperty("address.cityName")
-    private String city; // City where the airport is located, assuming flat mapping doesn't work
+    @JsonProperty("address")
+    private Address address;
 
-    @JsonProperty("address.countryCode")
-    private String country; // Country code, assuming flat mapping doesn't work
+    @Getter
+    @Setter
+    public static class Address {
+        @JsonProperty("cityName")
+        private String city;
+
+        @JsonProperty("countryCode")
+        private String country;
+    }
 }
 
