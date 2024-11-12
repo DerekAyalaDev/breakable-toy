@@ -2,6 +2,7 @@ package com.encora.searchflights.service.impl;
 
 import com.encora.searchflights.config.WebClientConfig;
 import com.encora.searchflights.model.airport.AirportInfo;
+import com.encora.searchflights.model.airport.AirportResponse;
 import com.encora.searchflights.service.AirportService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,9 +27,10 @@ public class AirportServiceImpl implements AirportService {
                                 .queryParam("keyword", keyword)
                                 .queryParam("page[limit]", 10) // Limit the results for simplicity
                                 .build())
-                        .header("Authorization", "Bearer " + token) // Set the token in the Authorization header
+                        .header("Authorization", "Bearer " + token)
                         .retrieve()
-                        .bodyToFlux(AirportInfo.class))
+                        .bodyToFlux(AirportResponse.class)
+                        .flatMapIterable(AirportResponse::getData))
                 .collectList();
     }
 }
