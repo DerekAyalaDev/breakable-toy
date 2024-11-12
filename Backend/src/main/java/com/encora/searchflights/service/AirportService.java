@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface AirportService {
     Mono<List<AirportInfo>> searchAirportsByName(String keyword);
+    AirportInfo getAirportByIataCode(String iataCode);
 }
