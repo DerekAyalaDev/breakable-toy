@@ -37,7 +37,7 @@ public class FlightController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             @FutureOrPresent(message = "Return date cannot be in the past") LocalDate returnDate,
             @RequestParam @Min(value = 1, message = "At least one adult is required") int numberOfAdults,
-            @RequestParam @NotBlank(message = "Currency is required") Currency currency,
+            @RequestParam @NotNull(message = "Currency is required") Currency currency,
             @RequestParam(defaultValue = "false") boolean nonStop,
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "") String sortByPrice,
