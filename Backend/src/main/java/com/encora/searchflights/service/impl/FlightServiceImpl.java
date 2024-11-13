@@ -32,7 +32,7 @@ public class FlightServiceImpl implements FlightService {
         List<FlightOffer> flightOffers = fetchFlightOffers(request);
 
         // Sort the flight offers based on sort parameters
-        List<FlightOffer> sortedOffers = sortFlightOffers(flightOffers, request.getSortByPrice(), request.getSortByDuration());
+        List<FlightOffer> sortedOffers = sortFlightOffers(flightOffers, request.isSortByPrice(), request.isSortByDuration());
 
         // Paginate the sorted list and return response DTO
         return createPaginatedResponse(sortedOffers, request.getPageNumber(), 10);
@@ -49,7 +49,7 @@ public class FlightServiceImpl implements FlightService {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/v2/shopping/flight-offers")
-                        .queryParam("max", 100)
+                        .queryParam("max", 50)
                         .queryParam("originLocationCode", request.getDepartureAirportCode())
                         .queryParam("destinationLocationCode", request.getArrivalAirportCode())
                         .queryParam("departureDate", request.getDepartureDate().toString())
@@ -73,22 +73,16 @@ public class FlightServiceImpl implements FlightService {
      * @param sortByDuration sorting order for duration: "ASC" for ascending, "DESC" for descending, or empty for no sorting.
      * @return a sorted list of flight offers.
      */
-    private List<FlightOffer> sortFlightOffers(List<FlightOffer> flightOffers, String sortByPrice, String sortByDuration) {
+    private List<FlightOffer> sortFlightOffers(List<FlightOffer> flightOffers, boolean sortByPrice, boolean sortByDuration) {
         Comparator<FlightOffer> comparator = Comparator.comparing(offer -> 0); // Start with a no-op comparator
 
-        if ("ASC".equalsIgnoreCase(sortByPrice)) {
+        if (sortByPrice) {
             comparator = comparator.thenComparing(offer -> Double.parseDouble(offer.getPrice().getGrandTotal())
-            );
-        } else if ("DESC".equalsIgnoreCase(sortByPrice)) {
-            comparator = comparator.thenComparing((offer1, offer2) -> Double.compare(Double.parseDouble(offer2.getPrice().getGrandTotal()), Double.parseDouble(offer1.getPrice().getGrandTotal()))
             );
         }
 
-        if ("ASC".equalsIgnoreCase(sortByDuration)) {
+        if (sortByDuration) {
             comparator = comparator.thenComparing(this::getTotalDuration);
-        } else if ("DESC".equalsIgnoreCase(sortByDuration)) {
-            comparator = comparator.thenComparing((offer1, offer2) -> getTotalDuration(offer2).compareTo(getTotalDuration(offer1))
-            );
         }
 
         return flightOffers.stream()

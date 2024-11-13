@@ -40,8 +40,8 @@ public class FlightController {
             @RequestParam @NotNull(message = "Currency is required") Currency currency,
             @RequestParam(defaultValue = "false") boolean nonStop,
             @RequestParam(defaultValue = "1") int pageNumber,
-            @RequestParam(defaultValue = "") String sortByPrice,
-            @RequestParam(defaultValue = "") String sortByDuration,
+            @RequestParam(defaultValue = "false") boolean sortByPrice,
+            @RequestParam(defaultValue = "false") boolean sortByDuration,
             @RequestParam(defaultValue = "false") boolean showAll
     ) {
         // Create FlightSearchRequestDTO with validated parameters

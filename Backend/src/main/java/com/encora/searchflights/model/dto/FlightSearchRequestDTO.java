@@ -30,9 +30,9 @@ public class FlightSearchRequestDTO {
 
     private int pageNumber=1;
 
-    private String sortByPrice = "";
+    private boolean sortByPrice = false;
 
-    private String sortByDuration = "";
+    private boolean sortByDuration = false;
 
     private boolean showAll = false;
 }
