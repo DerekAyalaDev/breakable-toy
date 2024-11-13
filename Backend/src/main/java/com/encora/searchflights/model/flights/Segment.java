@@ -1,6 +1,5 @@
 package com.encora.searchflights.model.flights;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,5 +15,4 @@ public class Segment {
     private String duration;
     private String id;
     private int numberOfStops;
-    private boolean blacklistedInEU;
 }

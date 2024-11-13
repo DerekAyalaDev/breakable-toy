@@ -2,7 +2,6 @@ package com.encora.searchflights.controller;
 
 import com.encora.searchflights.model.airport.AirportInfo;
 import com.encora.searchflights.service.AirportService;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

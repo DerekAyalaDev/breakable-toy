@@ -10,29 +10,15 @@ import java.util.List;
 @Setter
 public class FlightOffer {
 
-    private String type; // "flight-offer"
-
     private String id;
 
-    private String source;
-
-    private boolean instantTicketingRequired;
-
-    private boolean nonHomogeneous;
-
     private boolean oneWay;
-
-    private String lastTicketingDate;
-
-    private int numberOfBookableSeats;
 
     private List<Itinerary> itineraries;
 
     private Price price;
 
     private PricingOptions pricingOptions;
-
-    private List<String> validatingAirlineCodes;
 
     private List<TravelerPricing> travelerPricings;
 }
