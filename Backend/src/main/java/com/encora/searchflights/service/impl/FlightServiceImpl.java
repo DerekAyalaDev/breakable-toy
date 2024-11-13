@@ -6,7 +6,6 @@ import com.encora.searchflights.model.dto.FlightSearchRequestDTO;
 import com.encora.searchflights.model.flights.FlightOffer;
 import com.encora.searchflights.service.FlightService;
 import lombok.AllArgsConstructor;
-import lombok.Setter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -24,6 +23,11 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public FlightOfferResponseDTO searchFlights(FlightSearchRequestDTO request) {
+        // Validate that the return date is not earlier than the departure date
+        if (request.getReturnDate() != null && request.getReturnDate().isBefore(request.getDepartureDate())) {
+            throw new IllegalArgumentException("Return date cannot be earlier than departure date.");
+        }
+
         List<FlightOffer> flightOffers = fetchFlightOffers(request);
 
         // Sort the flight offers based on sort parameters
