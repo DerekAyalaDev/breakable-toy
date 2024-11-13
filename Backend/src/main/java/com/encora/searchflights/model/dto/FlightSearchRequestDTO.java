@@ -34,4 +34,10 @@ public class FlightSearchRequestDTO {
     private Currency currency;
 
     private boolean nonStop;
+
+    private int pageNumber=1;
+    private String sortByPrice = "";
+    private String sortByDuration = "";
+
+    private boolean showAll = false;
 }
