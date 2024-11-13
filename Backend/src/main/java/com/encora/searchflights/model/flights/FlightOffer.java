@@ -10,13 +10,29 @@ import java.util.List;
 @Setter
 public class FlightOffer {
 
-    private String id; // Flight offer ID
+    private String type; // "flight-offer"
 
-    private List<Itinerary> itineraries; // Contains the flight itinerary details
+    private String id;
 
-    @JsonProperty("price")
-    private PriceBreakdown priceBreakdown; // Total price in selected currency
+    private String source;
 
-    @JsonProperty("travelerPricings")
-    private List<TravelerPricing> travelerPricings; // Traveler-specific pricing details
+    private boolean instantTicketingRequired;
+
+    private boolean nonHomogeneous;
+
+    private boolean oneWay;
+
+    private String lastTicketingDate;
+
+    private int numberOfBookableSeats;
+
+    private List<Itinerary> itineraries;
+
+    private Price price;
+
+    private PricingOptions pricingOptions;
+
+    private List<String> validatingAirlineCodes;
+
+    private List<TravelerPricing> travelerPricings;
 }

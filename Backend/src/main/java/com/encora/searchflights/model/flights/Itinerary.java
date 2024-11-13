@@ -10,8 +10,7 @@ import java.util.List;
 @Setter
 public class Itinerary {
 
-    @JsonProperty("duration")
-    private String totalDuration; // Total duration of the itinerary (from departure to arrival)
+    private String duration; // e.g., "PT16H35M"
 
-    private List<Segment> segments; // Contains each segment (leg of the journey)
+    private List<Segment> segments;
 }

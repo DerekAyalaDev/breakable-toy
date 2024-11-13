@@ -9,12 +9,9 @@ import java.util.List;
 @Getter
 @Setter
 public class TravelerPricing {
-
-    private String travelerType; // E.g., "ADULT"
-
-    @JsonProperty("price")
-    private PriceDetail priceDetail; // Price details for this traveler
-
-    @JsonProperty("fareDetailsBySegment")
-    private List<FareDetail> fareDetailsBySegment; // Fare details for each segment
+    private String travelerId;
+    private String fareOption;
+    private String travelerType;
+    private Price price;
+    private List<FareDetailsBySegment> fareDetailsBySegment;
 }

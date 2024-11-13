@@ -7,17 +7,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Segment {
-
-    private FlightEndPoint departure; // Departure details (airport code, time)
-    private FlightEndPoint arrival;   // Arrival details (airport code, time)
-
-    @JsonProperty("carrierCode")
-    private String airlineCode; // Main airline code
-
-    private String number; // Flight number
-
-    @JsonProperty("operating")
-    private OperatingFlight operatingAirline; // Operating airline details if different
-
-    private String duration; // Duration of this segment
+    private FlightEndPoint departure;
+    private FlightEndPoint arrival;
+    private String carrierCode;
+    private String number;
+    private Aircraft aircraft;
+    private OperatingFlight operating;
+    private String duration;
+    private String id;
+    private int numberOfStops;
+    private boolean blacklistedInEU;
 }

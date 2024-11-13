@@ -10,8 +10,9 @@ import java.time.LocalDateTime;
 @Setter
 public class FlightEndPoint {
 
-    private String iataCode; // Airport code
+    private String iataCode;
 
-    @JsonProperty("at")
-    private LocalDateTime dateTime; // Departure or arrival time
+    private String terminal;
+
+    private String at; // ISO date-time format
 }
