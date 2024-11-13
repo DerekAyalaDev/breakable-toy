@@ -4,6 +4,7 @@ import com.encora.searchflights.config.WebClientConfig;
 import com.encora.searchflights.model.dto.FlightOfferResponseDTO;
 import com.encora.searchflights.model.dto.FlightSearchRequestDTO;
 import com.encora.searchflights.model.flights.FlightOffer;
+import com.encora.searchflights.model.flights.FlightOfferResponse;
 import com.encora.searchflights.service.FlightService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -59,8 +60,8 @@ public class FlightServiceImpl implements FlightService {
                         .build())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .retrieve()
-                .bodyToFlux(FlightOffer.class)
-                .collectList()
+                .bodyToMono(FlightOfferResponse.class)
+                .map(FlightOfferResponse::getData)
                 .block();
     }
 
@@ -76,15 +77,18 @@ public class FlightServiceImpl implements FlightService {
         Comparator<FlightOffer> comparator = Comparator.comparing(offer -> 0); // Start with a no-op comparator
 
         if ("ASC".equalsIgnoreCase(sortByPrice)) {
-            comparator = comparator.thenComparing(offer -> offer.getPriceBreakdown().getTotal());
+            comparator = comparator.thenComparing(offer -> Double.parseDouble(offer.getPrice().getGrandTotal())
+            );
         } else if ("DESC".equalsIgnoreCase(sortByPrice)) {
-            comparator = comparator.thenComparing((offer1, offer2) -> Double.compare(offer2.getPriceBreakdown().getTotal(), offer1.getPriceBreakdown().getTotal()));
+            comparator = comparator.thenComparing((offer1, offer2) -> Double.compare(Double.parseDouble(offer2.getPrice().getGrandTotal()), Double.parseDouble(offer1.getPrice().getGrandTotal()))
+            );
         }
 
         if ("ASC".equalsIgnoreCase(sortByDuration)) {
             comparator = comparator.thenComparing(this::getTotalDuration);
         } else if ("DESC".equalsIgnoreCase(sortByDuration)) {
-            comparator = comparator.thenComparing((offer1, offer2) -> getTotalDuration(offer2).compareTo(getTotalDuration(offer1)));
+            comparator = comparator.thenComparing((offer1, offer2) -> getTotalDuration(offer2).compareTo(getTotalDuration(offer1))
+            );
         }
 
         return flightOffers.stream()
@@ -120,7 +124,7 @@ public class FlightServiceImpl implements FlightService {
      */
     private Duration getTotalDuration(FlightOffer offer) {
         return offer.getItineraries().stream()
-                .map(itinerary -> Duration.parse(itinerary.getTotalDuration()))
+                .map(itinerary -> Duration.parse(itinerary.getDuration()))
                 .reduce(Duration.ZERO, Duration::plus);
     }
 }
