@@ -8,6 +8,7 @@ import com.encora.searchflights.service.FlightService;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
@@ -15,7 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Setter
+@Service
 @AllArgsConstructor
 public class FlightServiceImpl implements FlightService {
     private final WebClient webClient;
