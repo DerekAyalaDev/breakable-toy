@@ -33,6 +33,4 @@ public class FlightSearchRequestDTO {
     private boolean sortByPrice = false;
 
     private boolean sortByDuration = false;
-
-    private boolean showAll = false;
 }

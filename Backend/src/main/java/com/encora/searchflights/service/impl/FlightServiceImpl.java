@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.Comparator;
@@ -23,46 +24,42 @@ public class FlightServiceImpl implements FlightService {
     private final WebClientConfig webClientConfig;
 
     @Override
-    public FlightOfferResponseDTO searchFlights(FlightSearchRequestDTO request) {
+    public Mono<FlightOfferResponseDTO> searchFlights(FlightSearchRequestDTO request) {
         // Validate that the return date is not earlier than the departure date
         if (request.getReturnDate() != null && request.getReturnDate().isBefore(request.getDepartureDate())) {
-            throw new IllegalArgumentException("Return date cannot be earlier than departure date.");
+            return Mono.error(new IllegalArgumentException("Return date cannot be earlier than departure date."));
         }
 
-        List<FlightOffer> flightOffers = fetchFlightOffers(request);
-
-        // Sort the flight offers based on sort parameters
-        List<FlightOffer> sortedOffers = sortFlightOffers(flightOffers, request.isSortByPrice(), request.isSortByDuration());
-
-        // Paginate the sorted list and return response DTO
-        return createPaginatedResponse(sortedOffers, request.getPageNumber(), 10);
+        // Fetch flight offers asynchronously and then sort and paginate the results
+        return fetchFlightOffers(request)
+                .map(flightOffers -> sortFlightOffers(flightOffers, request.isSortByPrice(), request.isSortByDuration()))
+                .map(sortedOffers -> createPaginatedResponse(sortedOffers, request.getPageNumber(), 10));
     }
 
     /**
      * Fetches up to 100 flight offers from the Amadeus API based on the search criteria in the request.
      *
      * @param request the search criteria including origin, destination, dates, etc.
-     * @return a list of flight offers.
+     * @return a Mono containing a list of flight offers.
      */
-    private List<FlightOffer> fetchFlightOffers(FlightSearchRequestDTO request) {
-        String token = webClientConfig.getAccessToken().block();
-        return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/v2/shopping/flight-offers")
-                        .queryParam("max", 50)
-                        .queryParam("originLocationCode", request.getDepartureAirportCode())
-                        .queryParam("destinationLocationCode", request.getArrivalAirportCode())
-                        .queryParam("departureDate", request.getDepartureDate().toString())
-                        .queryParam("returnDate", request.getReturnDate() != null ? request.getReturnDate().toString() : null)
-                        .queryParam("adults", request.getNumberOfAdults())
-                        .queryParam("currencyCode", request.getCurrency())
-                        .queryParam("nonStop", request.isNonStop())
-                        .build())
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                .retrieve()
-                .bodyToMono(FlightOfferResponse.class)
-                .map(FlightOfferResponse::getData)
-                .block();
+    private Mono<List<FlightOffer>> fetchFlightOffers(FlightSearchRequestDTO request) {
+        return webClientConfig.getAccessToken()
+                .flatMap(token -> webClient.get()
+                        .uri(uriBuilder -> uriBuilder
+                                .path("/v2/shopping/flight-offers")
+                                .queryParam("max", 50)
+                                .queryParam("originLocationCode", request.getDepartureAirportCode())
+                                .queryParam("destinationLocationCode", request.getArrivalAirportCode())
+                                .queryParam("departureDate", request.getDepartureDate().toString())
+                                .queryParam("returnDate", request.getReturnDate() != null ? request.getReturnDate().toString() : null)
+                                .queryParam("adults", request.getNumberOfAdults())
+                                .queryParam("currencyCode", request.getCurrency())
+                                .queryParam("nonStop", request.isNonStop())
+                                .build())
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                        .retrieve()
+                        .bodyToMono(FlightOfferResponse.class)
+                        .map(FlightOfferResponse::getData));
     }
 
     /**

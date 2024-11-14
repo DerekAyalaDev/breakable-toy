@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 
@@ -27,7 +28,7 @@ public class FlightController {
     private final FlightService flightService;
 
     @GetMapping("/search")
-    public ResponseEntity<FlightOfferResponseDTO> searchFlights(
+    public Mono<ResponseEntity<FlightOfferResponseDTO>> searchFlights(
             @RequestParam @NotBlank(message = "Departure airport code is required") String departureAirportCode,
             @RequestParam @NotBlank(message = "Arrival airport code is required") String arrivalAirportCode,
             @RequestParam @NotNull(message = "Departure date is required")
@@ -41,14 +42,15 @@ public class FlightController {
             @RequestParam(defaultValue = "false") boolean nonStop,
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "false") boolean sortByPrice,
-            @RequestParam(defaultValue = "false") boolean sortByDuration,
-            @RequestParam(defaultValue = "false") boolean showAll
+            @RequestParam(defaultValue = "false") boolean sortByDuration
     ) {
         // Create FlightSearchRequestDTO with validated parameters
-        FlightSearchRequestDTO requestDTO = new FlightSearchRequestDTO(departureAirportCode, arrivalAirportCode, departureDate, returnDate, numberOfAdults, currency, nonStop, pageNumber, sortByPrice, sortByDuration, showAll);
+        FlightSearchRequestDTO requestDTO = new FlightSearchRequestDTO(
+                departureAirportCode, arrivalAirportCode, departureDate, returnDate,
+                numberOfAdults, currency, nonStop, pageNumber, sortByPrice, sortByDuration
+        );
 
-        // Call service to search flights and return response
-        FlightOfferResponseDTO response = flightService.searchFlights(requestDTO);
-        return ResponseEntity.ok(response);
+        // Call service to search flights and return response reactively
+        return flightService.searchFlights(requestDTO).map(ResponseEntity::ok);
     }
 }
