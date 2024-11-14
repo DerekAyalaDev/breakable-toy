@@ -35,25 +35,23 @@ public class AirportServiceImpl implements AirportService {
     }
 
     @Override
-    public AirportInfo getAirportByIataCode(String iataCode) {
-        String token = webClientConfig.getAccessToken().block();
-
-        return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/v1/reference-data/locations")
-                        .queryParam("subType", "AIRPORT")
-                        .queryParam("keyword", iataCode)
-                        .queryParam("page[limit]", 1)
-                        .build())
-                .header("Authorization", "Bearer " + token)
-                .retrieve()
-                .bodyToMono(AirportResponse.class)
-                .flatMap(response -> {
-                    if (response.getData() != null && !response.getData().isEmpty()) {
-                        return Mono.just(response.getData().get(0));
-                    }
-                    return Mono.empty();
-                })
-                .block();
+    public Mono<AirportInfo> getAirportByIataCode(String iataCode) {
+        return webClientConfig.getAccessToken()
+                .flatMap(token -> webClient.get()
+                        .uri(uriBuilder -> uriBuilder
+                                .path("/v1/reference-data/locations")
+                                .queryParam("subType", "AIRPORT")
+                                .queryParam("keyword", iataCode)
+                                .queryParam("page[limit]", 1)
+                                .build())
+                        .header("Authorization", "Bearer " + token)
+                        .retrieve()
+                        .bodyToMono(AirportResponse.class)
+                        .flatMap(response -> {
+                            if (response.getData() != null && !response.getData().isEmpty()) {
+                                return Mono.just(response.getData().get(0));
+                            }
+                            return Mono.empty();
+                        }));
     }
 }

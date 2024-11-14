@@ -28,12 +28,10 @@ public class AirportController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<AirportInfo> getAirportByIataCode(@RequestParam @NotBlank(message = "The 'iataCode' parameter must not be blank") String iataCode) {
-        AirportInfo airportInfo = airportService.getAirportByIataCode(iataCode);
-        if (airportInfo == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        return ResponseEntity.ok(airportInfo);
+    public Mono<ResponseEntity<AirportInfo>> getAirportByIataCode(
+            @RequestParam @NotBlank(message = "The 'iataCode' parameter must not be blank") String iataCode) {
+        return airportService.getAirportByIataCode(iataCode)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }
