@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @RestController
 @AllArgsConstructor
@@ -20,11 +21,9 @@ public class AirlineController {
     private final AirlineService airlineService;
 
     @GetMapping("/get")
-    public ResponseEntity<AirlineInfo> getAirlineInfo(@RequestParam @NotBlank(message = "Airline code must not be blank") String airlineCode) {
-        AirlineInfo airlineInfo = airlineService.getAirlineInfo(airlineCode);
-        if (airlineInfo == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(airlineInfo);
+    public Mono<ResponseEntity<AirlineInfo>> getAirlineInfo(@RequestParam @NotBlank(message = "Airline code must not be blank") String airlineCode) {
+        return airlineService.getAirlineInfo(airlineCode)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 }
