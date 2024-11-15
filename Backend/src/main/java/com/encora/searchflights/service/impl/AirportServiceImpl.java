@@ -25,7 +25,7 @@ public class AirportServiceImpl implements AirportService {
                                 .path("/v1/reference-data/locations")
                                 .queryParam("subType", "AIRPORT")
                                 .queryParam("keyword", keyword)
-                                .queryParam("page[limit]", 10) // Limit the results for simplicity
+                                .queryParam("page[limit]", 5) // Limit the results for simplicity
                                 .build())
                         .header("Authorization", "Bearer " + token)
                         .retrieve()
