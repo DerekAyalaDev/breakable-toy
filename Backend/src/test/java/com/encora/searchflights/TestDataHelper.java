@@ -1,6 +1,7 @@
 package com.encora.searchflights;
 
 import com.encora.searchflights.enums.Currency;
+import com.encora.searchflights.model.airport.AirportInfo;
 import com.encora.searchflights.model.dto.FlightSearchRequestDTO;
 
 import java.time.LocalDate;
@@ -67,4 +68,18 @@ public class TestDataHelper {
         requestDTO.setSortByDuration(byDuration);
         return requestDTO;
     }
+
+    public static AirportInfo createAirportInfo(String name, String iataCode, String city, String country) {
+        AirportInfo airportInfo = new AirportInfo();
+        airportInfo.setName(name);
+        airportInfo.setIataCode(iataCode);
+
+        AirportInfo.Address address = new AirportInfo.Address();
+        address.setCity(city);
+        address.setCountry(country);
+
+        airportInfo.setAddress(address);
+        return airportInfo;
+    }
+
 }
