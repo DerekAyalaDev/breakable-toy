@@ -1,21 +1,19 @@
 package com.encora.searchflights.integration;
 
-import com.encora.searchflights.controller.AirlineController;
 import com.encora.searchflights.model.airline.AirlineInfo;
 import com.encora.searchflights.service.AirlineService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.Mockito.when;
 
-@WebFluxTest(AirlineController.class)
-@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
 public class AirlineControllerTest {
 
     @Autowired
@@ -61,9 +59,24 @@ public class AirlineControllerTest {
         webTestClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/api/airlines/get").queryParam("airlineCode", "").build())
                 .exchange()
-                .expectStatus().isBadRequest()
+                .expectStatus().isBadRequest() // Expect 400 Bad Request
                 .expectBody()
-                .jsonPath("$.airlineCode").isEqualTo("Airline code must not be blank"); // Match the exact response
+                // Verify the violations field contains the specific error for airlineCode
+                .jsonPath("$.violations.airlineCode").isEqualTo("Airline code must not be blank")
+                // Verify the general validation message
+                .jsonPath("$.message").isEqualTo("Validation failed for the provided parameters.");
     }
 
+    @Test
+    void testGetAirlineInfo_MissingAirlineCode() {
+        // Perform the GET request without the airlineCode parameter
+        webTestClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/api/airlines/get").build())
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$.requiredParameters").exists()
+                .jsonPath("$.requiredParameters.airlineCode").isEqualTo("e.g., AA (IATA code)")
+                .jsonPath("$.message").isEqualTo("Missing required parameters. Ensure the following parameters are included in the request:");
+    }
 }
