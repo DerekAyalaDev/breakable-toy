@@ -2,6 +2,7 @@ package com.encora.searchflights.service;
 
 import com.encora.searchflights.TestDataHelper;
 import com.encora.searchflights.config.WebClientConfig;
+import com.encora.searchflights.exception.InvalidReturnDateException;
 import com.encora.searchflights.model.dto.FlightOfferResponseDTO;
 import com.encora.searchflights.model.dto.FlightSearchRequestDTO;
 import com.encora.searchflights.model.flights.FlightOffer;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import static com.encora.searchflights.TestDataHelper.getFlightSearchRequestDTO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 public class FlightServiceTest {
@@ -145,14 +147,17 @@ public class FlightServiceTest {
     @Test
     void testSearchFlightsInvalidDateOrder() {
         // Create a request DTO with a return date before the departure date
-        FlightSearchRequestDTO requestDTO = getFlightSearchRequestDTO(false, false, LocalDate.of(2024,11,1));
+        FlightSearchRequestDTO requestDTO = getFlightSearchRequestDTO(false, false, LocalDate.of(2024, 11, 1));
 
-        // Use StepVerifier to verify that an error is returned
+        // Use StepVerifier to verify that an InvalidReturnDateException is returned
         StepVerifier.create(flightService.searchFlights(requestDTO))
-                .expectErrorMatches(throwable -> throwable instanceof IllegalArgumentException &&
-                        throwable.getMessage().equals("Return date cannot be earlier than departure date."))
+                .expectErrorSatisfies(throwable -> {
+                    assertTrue(throwable instanceof InvalidReturnDateException);
+                    assertEquals("Return date cannot be earlier than departure date.", throwable.getMessage());
+                })
                 .verify();
     }
+
 
     @Test
     void testSearchFlightsSortedByPriceAndDuration() {
