@@ -1,25 +1,24 @@
 package com.encora.searchflights.integration;
 
-import com.encora.searchflights.controller.AirportController;
 import com.encora.searchflights.model.airport.AirportInfo;
 import com.encora.searchflights.service.AirportService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
 import static com.encora.searchflights.TestDataHelper.createAirportInfo;
 import static org.mockito.Mockito.when;
 
-@WebFluxTest(AirportController.class)
-@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
 public class AirportControllerTest {
 
     @Autowired
@@ -74,9 +73,28 @@ public class AirportControllerTest {
         webClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/api/airports/search").queryParam("keyword", "").build())
                 .exchange()
+                .expectStatus().isBadRequest() // Expect 400 Bad Request
+                .expectBody()
+                // Verify the violations field contains the specific error for keyword
+                .jsonPath("$.violations.keyword").isEqualTo("The 'keyword' parameter must not be blank")
+                // Verify the general validation message
+                .jsonPath("$.message").isEqualTo("Validation failed for the provided parameters.");
+    }
+
+    @Test
+    void testSearchAirports_MissingKeyword() {
+        // Perform the GET request without 'keyword'
+        webClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/api/airports/search").build())
+                .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody()
-                .jsonPath("$.keyword").isEqualTo("The 'keyword' parameter must not be blank");
+                .consumeWith(response -> {
+                    String responseBody = new String(response.getResponseBody(), StandardCharsets.UTF_8);
+                    System.out.println("Response: " + responseBody); // Inspección adicional
+                })
+                .jsonPath("$.requiredParameters.keyword").isEqualTo("e.g., Manchester")
+                .jsonPath("$.message").isEqualTo("Missing required parameters. Ensure the following parameters are included in the request:");
     }
 
     @Test
@@ -116,8 +134,23 @@ public class AirportControllerTest {
         webClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/api/airports/get").queryParam("iataCode", "").build())
                 .exchange()
+                .expectStatus().isBadRequest() // Expect 400 Bad Request
+                .expectBody()
+                // Verify the violations field contains the specific error for iataCode
+                .jsonPath("$.violations.iataCode").isEqualTo("The 'iataCode' parameter must not be blank")
+                // Verify the general validation message
+                .jsonPath("$.message").isEqualTo("Validation failed for the provided parameters.");
+    }
+
+    @Test
+    void testGetAirportByIataCode_MissingIataCode() {
+        // Perform the GET request without 'iataCode'
+        webClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/api/airports/get").build())
+                .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody()
-                .jsonPath("$.iataCode").isEqualTo("The 'iataCode' parameter must not be blank");
+                .jsonPath("$.requiredParameters.iataCode").isEqualTo("e.g., MAN")
+                .jsonPath("$.message").isEqualTo("Missing required parameters. Ensure the following parameters are included in the request:");
     }
 }
