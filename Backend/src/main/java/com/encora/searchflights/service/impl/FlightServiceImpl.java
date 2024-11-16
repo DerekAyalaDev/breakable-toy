@@ -1,6 +1,7 @@
 package com.encora.searchflights.service.impl;
 
 import com.encora.searchflights.config.WebClientConfig;
+import com.encora.searchflights.exception.InvalidReturnDateException;
 import com.encora.searchflights.model.dto.FlightOfferResponseDTO;
 import com.encora.searchflights.model.dto.FlightSearchRequestDTO;
 import com.encora.searchflights.model.flights.FlightOffer;
@@ -27,7 +28,7 @@ public class FlightServiceImpl implements FlightService {
     public Mono<FlightOfferResponseDTO> searchFlights(FlightSearchRequestDTO request) {
         // Validate that the return date is not earlier than the departure date
         if (request.getReturnDate() != null && request.getReturnDate().isBefore(request.getDepartureDate())) {
-            return Mono.error(new IllegalArgumentException("Return date cannot be earlier than departure date."));
+            return Mono.error(new InvalidReturnDateException("Return date cannot be earlier than departure date."));
         }
 
         // Fetch flight offers asynchronously and then sort and paginate the results
