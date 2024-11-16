@@ -1,16 +1,17 @@
 package com.encora.searchflights.integration;
 
-import com.encora.searchflights.model.airline.AirlineInfo;
-import com.encora.searchflights.service.AirlineService;
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Mono;
 
-import static org.mockito.Mockito.when;
+import com.encora.searchflights.model.airline.AirlineInfo;
+import com.encora.searchflights.service.AirlineService;
+
+import reactor.core.publisher.Mono;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -77,6 +78,7 @@ public class AirlineControllerTest {
                 .expectBody()
                 .jsonPath("$.requiredParameters").exists()
                 .jsonPath("$.requiredParameters.airlineCode").isEqualTo("e.g., AA (IATA code)")
-                .jsonPath("$.message").isEqualTo("Missing required parameters. Ensure the following parameters are included in the request:");
+                .jsonPath("$.message")
+                .isEqualTo("Missing required parameters. Ensure the following parameters are included in the request:");
     }
 }

@@ -1,25 +1,26 @@
 package com.encora.searchflights.service;
 
-import com.encora.searchflights.config.WebClientConfig;
-import com.encora.searchflights.model.airport.AirportInfo;
-import com.encora.searchflights.service.impl.AirportServiceImpl;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
-
 import java.io.IOException;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
+import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import com.encora.searchflights.config.WebClientConfig;
+import com.encora.searchflights.model.airport.AirportInfo;
+import com.encora.searchflights.service.impl.AirportServiceImpl;
+
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 public class AirportServiceTest {
     private MockWebServer mockWebServer;
@@ -49,8 +50,10 @@ public class AirportServiceTest {
     @Test
     void testSearchAirportsByName_FoundPartialMatches() {
         String responseJson = "{ \"data\": [" +
-                "{ \"name\": \"MANCHESTER AIRPORT\", \"iataCode\": \"MAN\", \"address\": { \"cityName\": \"MANCHESTER\", \"countryName\": \"UNITED KINGDOM\" } }," +
-                "{ \"name\": \"MANCHESTER BOSTON RGNL\", \"iataCode\": \"MHT\", \"address\": { \"cityName\": \"MANCHESTER\", \"countryName\": \"UNITED STATES OF AMERICA\" } }" +
+                "{ \"name\": \"MANCHESTER AIRPORT\", \"iataCode\": \"MAN\", \"address\": { \"cityName\": \"MANCHESTER\", \"countryName\": \"UNITED KINGDOM\" } },"
+                +
+                "{ \"name\": \"MANCHESTER BOSTON RGNL\", \"iataCode\": \"MHT\", \"address\": { \"cityName\": \"MANCHESTER\", \"countryName\": \"UNITED STATES OF AMERICA\" } }"
+                +
                 "] }";
 
         mockWebServer.enqueue(new MockResponse()

@@ -1,12 +1,13 @@
 package com.encora.searchflights.integration;
 
-import com.encora.searchflights.service.FlightService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
+
+import com.encora.searchflights.service.FlightService;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -37,7 +38,8 @@ public class FlightControllerTest {
                 .jsonPath("$.requiredParameters.returnDate").isEqualTo("Optional, e.g., 2024-12-10 (ISO format)")
                 .jsonPath("$.requiredParameters.numberOfAdults").isEqualTo("e.g., 1")
                 .jsonPath("$.requiredParameters.currency").isEqualTo("e.g., USD")
-                .jsonPath("$.message").isEqualTo("Missing required parameters. Ensure the following parameters are included in the request:");
+                .jsonPath("$.message")
+                .isEqualTo("Missing required parameters. Ensure the following parameters are included in the request:");
     }
 
     @Test
@@ -90,7 +92,8 @@ public class FlightControllerTest {
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody()
-                .jsonPath("$.violations.currency").isEqualTo("Invalid value for parameter 'currency'. Allowed values: USD, MXN, EUR")
+                .jsonPath("$.violations.currency")
+                .isEqualTo("Invalid value for parameter 'currency'. Allowed values: USD, MXN, EUR")
                 .jsonPath("$.message").isEqualTo("Validation failed for the provided parameters.");
     }
 
@@ -108,7 +111,8 @@ public class FlightControllerTest {
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody()
-                .jsonPath("$.violations.departureDate").isEqualTo("Invalid value for parameter 'departureDate'. Expected format: YYYY-MM-DD")
+                .jsonPath("$.violations.departureDate")
+                .isEqualTo("Invalid value for parameter 'departureDate'. Expected format: YYYY-MM-DD")
                 .jsonPath("$.message").isEqualTo("Validation failed for the provided parameters.");
     }
 

@@ -1,31 +1,32 @@
 package com.encora.searchflights.service;
 
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.when;
+import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import com.encora.searchflights.TestDataHelper;
+import static com.encora.searchflights.TestDataHelper.getFlightSearchRequestDTO;
 import com.encora.searchflights.config.WebClientConfig;
 import com.encora.searchflights.exception.InvalidReturnDateException;
 import com.encora.searchflights.model.dto.FlightOfferResponseDTO;
 import com.encora.searchflights.model.dto.FlightSearchRequestDTO;
 import com.encora.searchflights.model.flights.FlightOffer;
 import com.encora.searchflights.service.impl.FlightServiceImpl;
+
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.List;
-
-import static com.encora.searchflights.TestDataHelper.getFlightSearchRequestDTO;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
 
 public class FlightServiceTest {
     private MockWebServer mockWebServer;
@@ -157,7 +158,6 @@ public class FlightServiceTest {
                 })
                 .verify();
     }
-
 
     @Test
     void testSearchFlightsSortedByPriceAndDuration() {

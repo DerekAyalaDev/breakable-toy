@@ -1,15 +1,17 @@
 package com.encora.searchflights.service.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import com.encora.searchflights.config.WebClientConfig;
 import com.encora.searchflights.model.airport.AirportInfo;
 import com.encora.searchflights.model.airport.AirportResponse;
 import com.encora.searchflights.service.AirportService;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
+import reactor.core.publisher.Mono;
 
 @Service
 @AllArgsConstructor

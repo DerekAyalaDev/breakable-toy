@@ -1,6 +1,7 @@
 package com.encora.searchflights.model.airport;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,5 +27,3 @@ public class AirportInfo {
         private String country;
     }
 }
-
-

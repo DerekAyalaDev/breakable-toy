@@ -1,21 +1,22 @@
 package com.encora.searchflights.integration;
 
-import com.encora.searchflights.model.airport.AirportInfo;
-import com.encora.searchflights.service.AirportService;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Mono;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.List;
 
 import static com.encora.searchflights.TestDataHelper.createAirportInfo;
-import static org.mockito.Mockito.when;
+import com.encora.searchflights.model.airport.AirportInfo;
+import com.encora.searchflights.service.AirportService;
+
+import reactor.core.publisher.Mono;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -31,8 +32,7 @@ public class AirportControllerTest {
     void TestSearchAirports_Success() {
         List<AirportInfo> mockAirportList = List.of(
                 createAirportInfo("Manchester Airport", "MAN", "Manchester", "United Kingdom"),
-                createAirportInfo("Manchester Boston Regional", "MHT", "Manchester", "United States")
-        );
+                createAirportInfo("Manchester Boston Regional", "MHT", "Manchester", "United States"));
 
         when(airportService.searchAirportsByName("Manchester")).thenReturn(Mono.just(mockAirportList));
 
@@ -60,7 +60,8 @@ public class AirportControllerTest {
 
         // Perform the GET request and validate the response
         webClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/api/airports/search").queryParam("keyword", "UnknownPlace").build())
+                .uri(uriBuilder -> uriBuilder.path("/api/airports/search").queryParam("keyword", "UnknownPlace")
+                        .build())
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
@@ -94,7 +95,8 @@ public class AirportControllerTest {
                     System.out.println("Response: " + responseBody); // Inspección adicional
                 })
                 .jsonPath("$.requiredParameters.keyword").isEqualTo("e.g., Manchester")
-                .jsonPath("$.message").isEqualTo("Missing required parameters. Ensure the following parameters are included in the request:");
+                .jsonPath("$.message")
+                .isEqualTo("Missing required parameters. Ensure the following parameters are included in the request:");
     }
 
     @Test
@@ -151,6 +153,7 @@ public class AirportControllerTest {
                 .expectStatus().isBadRequest()
                 .expectBody()
                 .jsonPath("$.requiredParameters.iataCode").isEqualTo("e.g., MAN")
-                .jsonPath("$.message").isEqualTo("Missing required parameters. Ensure the following parameters are included in the request:");
+                .jsonPath("$.message")
+                .isEqualTo("Missing required parameters. Ensure the following parameters are included in the request:");
     }
 }

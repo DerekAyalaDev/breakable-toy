@@ -1,6 +1,7 @@
 package com.encora.searchflights.service;
 
 import com.encora.searchflights.model.airline.AirlineInfo;
+
 import reactor.core.publisher.Mono;
 
 public interface AirlineService {

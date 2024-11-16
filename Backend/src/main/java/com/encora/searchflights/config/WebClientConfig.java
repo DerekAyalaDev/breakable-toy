@@ -1,12 +1,14 @@
 package com.encora.searchflights.config;
 
-import com.encora.searchflights.model.response.TokenResponse;
-import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import com.encora.searchflights.model.response.TokenResponse;
+
+import io.github.cdimascio.dotenv.Dotenv;
 import reactor.core.publisher.Mono;
 
 @Configuration

@@ -1,14 +1,16 @@
 package com.encora.searchflights.service.impl;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import com.encora.searchflights.config.WebClientConfig;
 import com.encora.searchflights.model.airline.AirlineInfo;
 import com.encora.searchflights.model.airline.AirlineResponse;
 import com.encora.searchflights.service.AirlineService;
+
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import org.springframework.http.HttpStatus;
 
 @Service
 @AllArgsConstructor
@@ -18,7 +20,8 @@ public class AirlineServiceImpl implements AirlineService {
 
     @Override
     public Mono<AirlineInfo> getAirlineInfo(String airlineCode) {
-        String token = webClientConfig.getAccessToken().block(); // Asumiendo que WebClientConfig tiene un método para obtener el token.
+        String token = webClientConfig.getAccessToken().block(); // Asumiendo que WebClientConfig tiene un método para
+                                                                 // obtener el token.
 
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
@@ -28,7 +31,8 @@ public class AirlineServiceImpl implements AirlineService {
                 .header("Authorization", "Bearer " + token)
                 .retrieve()
                 .onStatus(status -> status.equals(HttpStatus.NOT_FOUND) || status.is4xxClientError(),
-                        clientResponse -> Mono.empty()) // Manejar 404 y otros errores del cliente sin lanzar una excepción
+                        clientResponse -> Mono.empty()) // Manejar 404 y otros errores del cliente sin lanzar una
+                                                        // excepción
                 .bodyToMono(AirlineResponse.class)
                 .flatMap(response -> {
                     if (response.getData() != null && !response.getData().isEmpty()) {

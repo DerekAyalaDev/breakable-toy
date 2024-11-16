@@ -1,23 +1,24 @@
 package com.encora.searchflights.service;
 
-import com.encora.searchflights.config.WebClientConfig;
-import com.encora.searchflights.model.airline.AirlineInfo;
-import com.encora.searchflights.service.impl.AirlineServiceImpl;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
+import java.io.IOException;
+
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import static org.mockito.Mockito.when;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import com.encora.searchflights.config.WebClientConfig;
+import com.encora.searchflights.model.airline.AirlineInfo;
+import com.encora.searchflights.service.impl.AirlineServiceImpl;
+
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-
-import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 public class AirlineServiceTest {
     private MockWebServer mockWebServer;
@@ -75,4 +76,3 @@ public class AirlineServiceTest {
                 .verify();
     }
 }
-
