@@ -1,9 +1,10 @@
-function Home() {
+import { Navbar } from "../components/navbar/AppBar";
+
 export const Home = () => {
   return (
-    <div>
-      <h1>Flight Search</h1>
-    </div>
+    <>
+      <Navbar />
+    </>
   );
 }
 
