@@ -1,4 +1,6 @@
 import { Box } from "@mui/material";
+import { AirportInput } from "./AirportInput";
+import { FlightLand, FlightTakeoff } from "@mui/icons-material";
 
 export const SearchForm = () => {
   return (
@@ -11,7 +13,8 @@ export const SearchForm = () => {
         width: "100%",
       }}
     >
-
+      <AirportInput label="Departure Airport" icon={<FlightTakeoff />} />
+      <AirportInput label="Arrival Airport" icon={<FlightLand />} />
     </Box>
   )
 }
