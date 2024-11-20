@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import { SearchForm } from "./SearchForm";
 
 export const SearchBox = () => {
   return (
@@ -22,7 +23,7 @@ export const SearchBox = () => {
         Discover exclusive flight deals powered by the Amadeus API. <br />
         Fill out the form below to find flights tailored to your travel plans!
       </Typography>
-      <Typography variant="body1" component="div"></Typography>
+      <SearchForm />
     </Box>
   );
 };
