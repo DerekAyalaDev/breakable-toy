@@ -2,49 +2,61 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import AirlinesIcon from "@mui/icons-material/Airlines";
+import { Box } from "@mui/material";
 
 export const Navbar = () => {
   return (
     <AppBar
       position="static"
       sx={{
-        backgroundColor: "var(--dark-primary-color)",
+        backgroundColor: "var(primary-color)",
         boxShadow: "none",
         padding: "0.5rem 1rem",
       }}
     >
       <Toolbar>
-        <Typography
-          variant="h4"
-          component="div"
+        <Box
           sx={{
-            color: "var(--secondary-color)",
-            fontWeight: 700,
-            flexGrow: 1,
             display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
             alignItems: "center",
             gap: 1,
+            flexGrow: 1,
           }}
         >
-          Flight Offers
-          <AirlinesIcon
+          <Typography
+            variant="h4"
+            component="div"
             sx={{
-              fontSize: "2.5rem",
-              verticalAlign: "middle"
-            }} />{" "}
+              color: "var(--secondary-color)",
+              fontWeight: 700,
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+            }}
+          >
+            Flight Offers
+            <AirlinesIcon
+              sx={{
+                fontSize: "2.5rem",
+                verticalAlign: "middle",
+              }}
+            />
+          </Typography>
           <Typography
             variant="body2"
             component="span"
             sx={{
-              color: "var(secondary-color)",
+              color: "var(--secondary-color)",
               fontWeight: 500,
-              fontSize: "0.8rem",
-              alignSelf: "flex-end"
+              fontSize: { xs: "0.7rem", sm: "0.8rem" },
+              alignSelf: { xs: "center", sm: "flex-end" },
+              mt: { xs: "-0.5rem", sm: "0" }
             }}
           >
             by Derek Ayala
           </Typography>
-        </Typography>
+        </Box>
       </Toolbar>
     </AppBar>
   );
