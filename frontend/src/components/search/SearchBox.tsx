@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { SearchForm } from "./SearchForm";
+import { SearchForm } from "./searchForm/SearchForm";
 
 export const SearchBox = () => {
   return (

@@ -1,9 +1,13 @@
 import { Box } from "@mui/material";
-import { AirportInput } from "./airportInput/AirportInput";
+import { AirportInput } from "../airportInput/AirportInput";
 import { FlightLand, FlightTakeoff } from "@mui/icons-material";
-import { DateInput } from "./DateInput";
+import { DateInput } from "../DateInput";
+import { CurrencySelector } from "../currencySelector/CurrencySelector";
+import { useState } from "react";
 
 export const SearchForm = () => {
+  const [currency, setCurrency] = useState<string>("");
+
   return (
     <Box
       component="form"
@@ -18,6 +22,7 @@ export const SearchForm = () => {
       <AirportInput label="Arrival Airport" icon={<FlightLand />} />
       <DateInput label="Departure Date" />
       <DateInput label="Arrival Date" />
+      <CurrencySelector label="Currency" currency={currency} onCurrencyChange={setCurrency} />
     </Box>
   )
 }
