@@ -4,9 +4,11 @@ import { FlightLand, FlightTakeoff } from "@mui/icons-material";
 import { DateInput } from "../DateInput";
 import { CurrencySelector } from "../currencySelector/CurrencySelector";
 import { useState } from "react";
+import { NonStopCheckbox } from "../NonStopCheckbox";
 
 export const SearchForm = () => {
   const [currency, setCurrency] = useState<string>("");
+  const [nonStop, setNonStop] = useState(false);
 
   return (
     <Box
@@ -22,7 +24,16 @@ export const SearchForm = () => {
       <AirportInput label="Arrival Airport" icon={<FlightLand />} />
       <DateInput label="Departure Date" />
       <DateInput label="Arrival Date" />
-      <CurrencySelector label="Currency" currency={currency} onCurrencyChange={setCurrency} />
+      <CurrencySelector
+        label="Currency"
+        currency={currency}
+        onCurrencyChange={setCurrency}
+      />
+      <NonStopCheckbox
+        label="Non-Stop"
+        checked={nonStop}
+        onChange={setNonStop}
+      />
     </Box>
-  )
-}
+  );
+};
