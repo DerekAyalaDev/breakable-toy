@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { AirportInput } from "./AirportInput";
+import { AirportInput } from "./airportInput/AirportInput";
 import { FlightLand, FlightTakeoff } from "@mui/icons-material";
 
 export const SearchForm = () => {

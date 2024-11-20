@@ -1,10 +1,7 @@
-import { Autocomplete, Box, InputAdornment, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, InputAdornment, TextField } from "@mui/material";
 import React from "react";
-
-interface AirportInputProps {
-  label: string;
-  icon: React.ReactNode;
-}
+import { FormLabel } from "../FormLabel";
+import { AirportInputProps } from "./types";
 
 export const AirportInput = ({ label, icon }: AirportInputProps) => {
   const [keyWord] = label.split(" ");
@@ -17,20 +14,7 @@ export const AirportInput = ({ label, icon }: AirportInputProps) => {
         gap: "1rem"
       }}
     >
-      <Typography
-        variant="subtitle1"
-        component="label"
-        sx={{
-          color: "var(--dark-secondary-color)",
-          fontWeight: 600,
-          flex: "1",
-          minWidth: "80px",
-          maxWidth: "130px",
-          textAlign: "end"
-        }}
-      >
-        {label}
-      </Typography>
+      <FormLabel label={label} />
       <Autocomplete
         freeSolo
         options={[]}
