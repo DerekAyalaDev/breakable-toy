@@ -10,6 +10,10 @@ export const Home = () => {
         maxWidth="md"
         sx={{
           marginTop: "2rem",
+          marginBottom: "4rem",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
         }}
       >
         <SearchBox />
