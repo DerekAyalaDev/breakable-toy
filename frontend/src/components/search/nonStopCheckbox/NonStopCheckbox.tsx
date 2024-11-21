@@ -1,16 +1,11 @@
 import { Box, Checkbox } from "@mui/material";
-import { FormLabel } from "./FormLabel";
-
-interface NonStopCheckboxProps {
-  label: string;
-  checked: boolean;
-  onChange: (checked: boolean) => void;
-}
+import { FormLabel } from "../FormLabel";
+import { NonStopCheckboxProps } from "./types";
 
 export const NonStopCheckbox = ({
   label,
   checked,
-  onChange,
+  onCheckedChange,
 }: NonStopCheckboxProps) => {
   return (
     <Box
@@ -31,7 +26,7 @@ export const NonStopCheckbox = ({
       >
         <Checkbox
           checked={checked}
-          onChange={(event) => onChange(event.target.checked)}
+          onChange={(event) => onCheckedChange(event.target.checked)}
           sx={{
             padding: 0,
             marginLeft: "-4px",

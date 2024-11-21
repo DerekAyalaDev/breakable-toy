@@ -4,7 +4,7 @@ import { FlightLand, FlightTakeoff } from "@mui/icons-material";
 import { DateInput } from "../DateInput";
 import { CurrencySelector } from "../currencySelector/CurrencySelector";
 import { useState } from "react";
-import { NonStopCheckbox } from "../NonStopCheckbox";
+import { NonStopCheckbox } from "../nonStopCheckbox/NonStopCheckbox";
 import { SearchButton } from "../SerachButton";
 import { Dayjs } from "dayjs";
 
@@ -51,12 +51,12 @@ export const SearchForm = () => {
       <CurrencySelector
         label="Currency"
         currency={currency}
-        onChange={setCurrency}
+        onCurrencyChange={setCurrency}
       />
       <NonStopCheckbox
         label="Non-Stop"
         checked={nonStop}
-        onChange={setNonStop}
+        onCheckedChange={setNonStop}
       />
       <SearchButton />
     </Box>

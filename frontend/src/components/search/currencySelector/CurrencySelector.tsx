@@ -5,7 +5,7 @@ import { CurrencySelectorProps } from "./types";
 export const CurrencySelector = ({
   label,
   currency,
-  onChange,
+  onCurrencyChange,
 }: CurrencySelectorProps) => {
   return (
     <Box
@@ -52,7 +52,7 @@ export const CurrencySelector = ({
         >
           <Select
             value={currency}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => onCurrencyChange(e.target.value)}
             displayEmpty
             sx={{
               color: currency === "" ? "rgba(0, 0, 0, 0.5)" : "inherit",
