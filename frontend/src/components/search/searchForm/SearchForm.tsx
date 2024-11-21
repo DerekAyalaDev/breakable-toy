@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { AirportInput } from "../airportInput/AirportInput";
 import { FlightLand, FlightTakeoff } from "@mui/icons-material";
-import { DateInput } from "../DateInput";
+import { DateInput } from "../dateInput/DateInput";
 import { CurrencySelector } from "../currencySelector/CurrencySelector";
 import { useState } from "react";
 import { NonStopCheckbox } from "../nonStopCheckbox/NonStopCheckbox";

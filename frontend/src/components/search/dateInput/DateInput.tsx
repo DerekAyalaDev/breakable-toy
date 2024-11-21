@@ -1,14 +1,9 @@
 import { Box, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { FormLabel } from "./FormLabel";
-import dayjs, { Dayjs } from "dayjs";
-
-interface DateInputProps {
-  label: string;
-  date: Dayjs | null;
-  onDateChange: (newDate: Dayjs | null) => void;
-}
+import { FormLabel } from "../FormLabel";
+import dayjs from "dayjs";
+import { DateInputProps } from "./types";
 
 export const DateInput = ({ label, date, onDateChange }: DateInputProps) => {
   const minDate = dayjs();
