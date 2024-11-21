@@ -1,29 +1,55 @@
 import { Autocomplete, Box, InputAdornment, TextField } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { FormLabel } from "../FormLabel";
-import { AirportInputProps } from "./types";
+import { AirportInfo, AirportInputProps } from "./types";
+import { handleInputChange } from "./handlers";
 
-export const AirportInput = ({ label, icon, airport, onAirportChange }: AirportInputProps) => {
-  const [keyWord] = label.split(" ");
+export const AirportInput = ({
+  label,
+  icon,
+  airport,
+  onAirportChange,
+}: AirportInputProps) => {
+  const [options, setOptions] = useState<AirportInfo[]>([]);
+
   return (
     <Box
       sx={{
         marginBottom: "1rem",
         display: "flex",
         alignItems: "center",
-        gap: "1rem"
+        gap: "1rem",
       }}
     >
       <FormLabel label={label} />
       <Autocomplete
         freeSolo
+        options={options}
         value={airport}
-        onInputChange={(event, newValue) => onAirportChange(newValue || "")}
-        options={[]}
+        getOptionLabel={(option) =>
+          typeof option === "string"
+            ? option
+            : `${option.iataCode} - ${option.address.countryName} - ${option.name}`
+        }
+        isOptionEqualToValue={(option, value) =>
+          typeof value === "string" ? option.iataCode === value : option.iataCode === value.iataCode
+        }
+        onInputChange={(event, value) => handleInputChange(value, setOptions)}
+        onChange={(event, newValue) =>
+          onAirportChange(
+            newValue && typeof newValue !== "string"
+              ? {
+                  iataCode: newValue.iataCode.trim(),
+                  name: newValue.name,
+                  address: { countryName: newValue.address.countryName },
+                }
+              : null
+          )
+        }
         renderInput={(params) => (
           <TextField
             {...params}
-            label={keyWord}
+            label={label.split(" ")[0]}
             InputProps={{
               ...params.InputProps,
               startAdornment: (
@@ -38,7 +64,7 @@ export const AirportInput = ({ label, icon, airport, onAirportChange }: AirportI
               sx: {
                 color: "var(--dark-secondary-color)",
                 fontWeight: 500,
-              }
+              },
             }}
             variant="outlined"
             fullWidth
