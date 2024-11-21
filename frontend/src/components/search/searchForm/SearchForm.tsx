@@ -6,10 +6,13 @@ import { CurrencySelector } from "../currencySelector/CurrencySelector";
 import { useState } from "react";
 import { NonStopCheckbox } from "../NonStopCheckbox";
 import { SearchButton } from "../SerachButton";
+import { Dayjs } from "dayjs";
 
 export const SearchForm = () => {
   const [departureAirport, setDepartureAirport] = useState<string>("");
   const [arrivalAirport, setArrivalAirport] = useState<string>("");
+  const [departureDate, setDepartureDate] = useState<Dayjs | null>(null);
+  const [arrivalDate, setArrivalDate] = useState<Dayjs | null>(null);
   const [currency, setCurrency] = useState<string>("");
   const [nonStop, setNonStop] = useState(false);
 
@@ -35,8 +38,16 @@ export const SearchForm = () => {
         onAirportChange={setArrivalAirport}
         icon={<FlightLand />}
       />
-      <DateInput label="Departure Date" />
-      <DateInput label="Arrival Date" />
+      <DateInput
+        label="Departure Date"
+        date={departureDate}
+        onDateChange={setDepartureDate}
+      />
+      <DateInput
+        label="Arrival Date"
+        date={arrivalDate}
+        onDateChange={setArrivalDate}
+      />
       <CurrencySelector
         label="Currency"
         currency={currency}

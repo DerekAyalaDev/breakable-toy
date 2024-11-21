@@ -1,18 +1,16 @@
 import { Box, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useState } from "react";
 import { FormLabel } from "./FormLabel";
 import dayjs, { Dayjs } from "dayjs";
 
 interface DateInputProps {
   label: string;
+  date: Dayjs | null;
+  onDateChange: (newDate: Dayjs | null) => void;
 }
 
-export const DateInput = ({ label }: DateInputProps) => {
-  const [selectedDate, setSelectedDate] = useState<Dayjs | null | undefined>(
-    null
-  );
+export const DateInput = ({ label, date, onDateChange }: DateInputProps) => {
   const minDate = dayjs();
   const maxDate = dayjs().add(2, "year");
   return (
@@ -27,8 +25,8 @@ export const DateInput = ({ label }: DateInputProps) => {
       <FormLabel label={label} />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
-          value={selectedDate}
-          onChange={(newValue) => setSelectedDate(newValue)}
+          value={date}
+          onChange={onDateChange}
           minDate={minDate}
           maxDate={maxDate}
           slots={{
