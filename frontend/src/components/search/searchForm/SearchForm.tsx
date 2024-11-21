@@ -5,6 +5,7 @@ import { DateInput } from "../DateInput";
 import { CurrencySelector } from "../currencySelector/CurrencySelector";
 import { useState } from "react";
 import { NonStopCheckbox } from "../NonStopCheckbox";
+import { SearchButton } from "../SerachButton";
 
 export const SearchForm = () => {
   const [currency, setCurrency] = useState<string>("");
@@ -34,6 +35,7 @@ export const SearchForm = () => {
         checked={nonStop}
         onChange={setNonStop}
       />
+      <SearchButton />
     </Box>
   );
 };
