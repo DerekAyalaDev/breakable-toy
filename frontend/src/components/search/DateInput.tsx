@@ -38,6 +38,18 @@ export const DateInput = ({ label }: DateInputProps) => {
             textField: {
               variant: "outlined",
               fullWidth: true,
+              InputProps: {
+                sx: {
+                  "& .MuiSvgIcon-root": {
+                    color: "var(--primary-color)",
+                    fontSize: "1.5rem",
+                    transition: "color 0.3s ease",
+                  },
+                  "&:hover .MuiSvgIcon-root": {
+                    color: "var(--dark-primary-color)",
+                  },
+                },
+              },
               sx: {
                 flex: "3",
                 "& .MuiOutlinedInput-root": {
