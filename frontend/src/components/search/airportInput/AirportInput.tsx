@@ -3,7 +3,7 @@ import React from "react";
 import { FormLabel } from "../FormLabel";
 import { AirportInputProps } from "./types";
 
-export const AirportInput = ({ label, icon }: AirportInputProps) => {
+export const AirportInput = ({ label, icon, airport, onAirportChange }: AirportInputProps) => {
   const [keyWord] = label.split(" ");
   return (
     <Box
@@ -17,6 +17,8 @@ export const AirportInput = ({ label, icon }: AirportInputProps) => {
       <FormLabel label={label} />
       <Autocomplete
         freeSolo
+        value={airport}
+        onInputChange={(event, newValue) => onAirportChange(newValue || "")}
         options={[]}
         renderInput={(params) => (
           <TextField
