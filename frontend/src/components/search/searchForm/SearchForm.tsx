@@ -27,7 +27,7 @@ export const SearchForm = () => {
       <CurrencySelector
         label="Currency"
         currency={currency}
-        onCurrencyChange={setCurrency}
+        onChange={setCurrency}
       />
       <NonStopCheckbox
         label="Non-Stop"

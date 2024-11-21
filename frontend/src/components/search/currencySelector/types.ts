@@ -1,5 +1,5 @@
 export interface CurrencySelectorProps {
   label: string;
   currency: string;
-  onCurrencyChange: (currency: string) => void;
+  onChange: (currency: string) => void;
 }
