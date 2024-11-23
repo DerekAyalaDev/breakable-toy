@@ -32,18 +32,28 @@ export const AirportInput = ({
             : `${option.iataCode} - ${option.address.countryName} - ${option.name}`
         }
         isOptionEqualToValue={(option, value) =>
-          typeof value === "string" ? option.iataCode === value : option.iataCode === value.iataCode
+          typeof value === "string"
+            ? option.iataCode === value
+            : option.iataCode === value?.iataCode
         }
-        onInputChange={(event, value) => handleInputChange(value, setOptions)}
+        onInputChange={(event, value) => {
+          if (
+            airport &&
+            typeof airport === "object" &&
+            `${airport.iataCode} - ${airport.address.countryName} - ${airport.name}` !==
+              value
+          ) {
+            onAirportChange(null);
+          }
+          handleInputChange(
+            value,
+            setOptions,
+            typeof airport === "object" ? airport : null
+          );
+        }}
         onChange={(event, newValue) =>
           onAirportChange(
-            newValue && typeof newValue !== "string"
-              ? {
-                  iataCode: newValue.iataCode.trim(),
-                  name: newValue.name,
-                  address: { countryName: newValue.address.countryName },
-                }
-              : null
+            newValue && typeof newValue !== "string" ? newValue : null
           )
         }
         renderInput={(params) => (

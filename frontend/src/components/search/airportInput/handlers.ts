@@ -4,9 +4,17 @@ import { AirportInfo } from "./types";
 
 export const handleInputChange = async (
   value: string,
-  setOptions: Dispatch<SetStateAction<AirportInfo[]>>
+  setOptions: Dispatch<SetStateAction<AirportInfo[]>>,
+  selectedAirport: AirportInfo | null
 ) => {
-  if (value.length < 3) {
+  // Stop fetching if an airport is already selected
+  if (selectedAirport) {
+    setOptions([]);
+    return;
+  }
+
+  // Ignore if input is too short or too long
+  if (value.length < 3 || value.length > 20) {
     setOptions([]);
     return;
   }

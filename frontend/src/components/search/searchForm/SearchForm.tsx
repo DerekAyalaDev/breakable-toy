@@ -7,10 +7,15 @@ import { useState } from "react";
 import { NonStopCheckbox } from "../nonStopCheckbox/NonStopCheckbox";
 import { SearchButton } from "../SerachButton";
 import { Dayjs } from "dayjs";
+import { AirportInfo } from "../airportInput/types";
 
 export const SearchForm = () => {
-  const [departureAirport, setDepartureAirport] = useState<string>("");
-  const [arrivalAirport, setArrivalAirport] = useState<string>("");
+  const [departureAirport, setDepartureAirport] = useState<AirportInfo | null>(
+    null
+  );
+  const [arrivalAirport, setArrivalAirport] = useState<AirportInfo | null>(
+    null
+  );
   const [departureDate, setDepartureDate] = useState<Dayjs | null>(null);
   const [arrivalDate, setArrivalDate] = useState<Dayjs | null>(null);
   const [currency, setCurrency] = useState<string>("");
