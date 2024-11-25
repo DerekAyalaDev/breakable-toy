@@ -1,6 +1,7 @@
 import { Container } from "@mui/material";
 import { Navbar } from "../components/navbar/AppBar";
 import { SearchBox } from "../components/search/SearchBox";
+import { SearchProvider } from "../context/search/SearchContext";
 
 export const Home = () => {
   return (
@@ -16,7 +17,9 @@ export const Home = () => {
           justifyContent: "flex-start",
         }}
       >
-        <SearchBox />
+        <SearchProvider>
+          <SearchBox />
+        </SearchProvider>
       </Container>
     </>
   );
