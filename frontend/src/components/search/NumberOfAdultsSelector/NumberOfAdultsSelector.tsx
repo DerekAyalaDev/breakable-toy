@@ -73,7 +73,7 @@ export const NumberOfAdultsSelector = ({
               },
             }}
           >
-            {[...Array(10).keys()].map((num) => (
+            {[...Array(9).keys()].map((num) => (
               <MenuItem key={num + 1} value={num + 1}>
                 {num + 1}
               </MenuItem>
