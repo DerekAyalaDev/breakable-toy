@@ -9,6 +9,7 @@ import { NumberOfAdultsSelector } from "../NumberOfAdultsSelector/NumberOfAdults
 import { useSearchContext } from "../../../context/search/SearchContext";
 import { handleSearch } from "./handlers";
 import { useNavigate } from "react-router-dom";
+import { useFlightContext } from "../../../context/flightOffers/FlightsContext";
 
 export const SearchForm = () => {
   const {
@@ -22,6 +23,7 @@ export const SearchForm = () => {
     setSearchValues,
   } = useSearchContext();
 
+  const { setFlightData } = useFlightContext();
   const navigate = useNavigate();
 
   return (
@@ -36,7 +38,7 @@ export const SearchForm = () => {
           currency,
           numberOfAdults,
           nonStop,
-        }, navigate)
+        }, setFlightData, navigate)
       }
       sx={{
         display: "flex",

@@ -1,10 +1,12 @@
 import { NavigateFunction } from "react-router-dom";
 import { SearchContextState } from "../../../context/search/types";
 import { fetchFlightOffers } from "./api";
+import { FlightOfferResponse } from "../../../context/flightOffers/types";
 
 export const handleSearch = async (
   event: React.FormEvent<HTMLFormElement>,
   searchValues: Partial<SearchContextState>,
+  setFlightData: (data: FlightOfferResponse) => void,
   navigate: NavigateFunction
 ) => {
   event.preventDefault();
@@ -29,7 +31,7 @@ export const handleSearch = async (
 
   try {
     const response = await fetchFlightOffers(searchValues);
-    console.log("Flight search result:", response);
+    setFlightData(response);
     navigate("/offers");
   } catch (error) {
     console.error("Error during flight search:", error);

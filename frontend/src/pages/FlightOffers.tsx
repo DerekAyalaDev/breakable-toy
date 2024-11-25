@@ -1,7 +1,10 @@
 import { Container } from "@mui/material";
 import { Navbar } from "../components/navbar/AppBar";
+import { useFlightContext } from "../context/flightOffers/FlightsContext";
 
 export const FlightOffers = () => {
+  const { flightData } = useFlightContext();
+
   return (
     <>
       <Navbar />
@@ -15,7 +18,7 @@ export const FlightOffers = () => {
           justifyContent: "flex-start",
         }}
       >
-        <div>Flight Offers</div>
+        
       </Container>
     </>
   );
