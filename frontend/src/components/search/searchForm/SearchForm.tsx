@@ -3,25 +3,43 @@ import { AirportInput } from "../airportInput/AirportInput";
 import { FlightLand, FlightTakeoff } from "@mui/icons-material";
 import { DateInput } from "../dateInput/DateInput";
 import { CurrencySelector } from "../currencySelector/CurrencySelector";
-import { useState } from "react";
 import { NonStopCheckbox } from "../nonStopCheckbox/NonStopCheckbox";
-import { SearchButton } from "../SerachButton";
-import { Dayjs } from "dayjs";
-import { AirportInfo } from "../airportInput/types";
+import { SearchButton } from "../SearchButton";
 import { NumberOfAdultsSelector } from "../NumberOfAdultsSelector/NumberOfAdultsSelector";
+import { useSearchContext } from "../../../context/search/SearchContext";
+import { handleSearch } from "./handlers";
 
 export const SearchForm = () => {
-  const [departureAirport, setDepartureAirport] = useState<AirportInfo | null>(
-    null
-  );
-  const [arrivalAirport, setArrivalAirport] = useState<AirportInfo | null>(
-    null
-  );
-  const [departureDate, setDepartureDate] = useState<Dayjs | null>(null);
-  const [arrivalDate, setArrivalDate] = useState<Dayjs | null>(null);
-  const [currency, setCurrency] = useState<string>("");
-  const [numberOfAdults, setNumberOfAdults] = useState<number>(1);
-  const [nonStop, setNonStop] = useState(false);
+  const {
+    departureAirport,
+    arrivalAirport,
+    departureDate,
+    arrivalDate,
+    currency,
+    numberOfAdults,
+    nonStop,
+    setSearchValues,
+    pageNumber,
+    sortByPrice,
+    sortByDuration
+  } = useSearchContext();
+
+  const handleFormSubmit = async () => {
+    const searchValues = {
+      departureAirport,
+      arrivalAirport,
+      departureDate,
+      arrivalDate,
+      currency,
+      numberOfAdults,
+      nonStop,
+      pageNumber,
+      sortByPrice,
+      sortByDuration,
+    };
+
+    await handleSearch(searchValues);
+  };
 
   return (
     <Box
@@ -36,41 +54,41 @@ export const SearchForm = () => {
       <AirportInput
         label="Departure Airport"
         airport={departureAirport}
-        onAirportChange={setDepartureAirport}
+        onAirportChange={(airport) => setSearchValues("departureAirport", airport)}
         icon={<FlightTakeoff />}
       />
       <AirportInput
         label="Arrival Airport"
         airport={arrivalAirport}
-        onAirportChange={setArrivalAirport}
+        onAirportChange={(airport) => setSearchValues("arrivalAirport", airport)}
         icon={<FlightLand />}
       />
       <DateInput
         label="Departure Date"
         date={departureDate}
-        onDateChange={setDepartureDate}
+        onDateChange={(date) => setSearchValues("departureDate", date)}
       />
       <DateInput
         label="Arrival Date"
         date={arrivalDate}
-        onDateChange={setArrivalDate}
+        onDateChange={(date) => setSearchValues("arrivalDate", date)}
       />
       <CurrencySelector
         label="Currency"
         currency={currency}
-        onCurrencyChange={setCurrency}
+        onCurrencyChange={(value) => setSearchValues("currency", value)}
       />
       <NumberOfAdultsSelector
         label="Adults"
         numberOfAdults={numberOfAdults}
-        onNumberOfAdultsChange={setNumberOfAdults}
+        onNumberOfAdultsChange={(value) => setSearchValues("numberOfAdults", value)}
       />
       <NonStopCheckbox
         label="Non-Stop"
         checked={nonStop}
-        onCheckedChange={setNonStop}
+        onCheckedChange={(value) => setSearchValues("nonStop", value)}
       />
-      <SearchButton />
+      <SearchButton onSubmit={handleFormSubmit} />
     </Box>
   );
 };

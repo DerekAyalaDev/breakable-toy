@@ -1,6 +1,10 @@
 import { Box, Button } from "@mui/material";
 
-export const SearchButton = () => {
+interface SearchButtonProps {
+  onSubmit: () => void;
+}
+
+export const SearchButton = ({ onSubmit }: SearchButtonProps) => {
   return (
     <Box
       sx={{
@@ -21,6 +25,7 @@ export const SearchButton = () => {
           },
           transition: "background-color 0.3s ease",
         }}
+        onClick={onSubmit}
       >
         Search
       </Button>
