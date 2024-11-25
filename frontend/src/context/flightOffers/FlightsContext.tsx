@@ -1,13 +1,15 @@
-import React, { createContext, useState, useContext } from 'react';
-import { FlightOfferResponse } from './types';
+import React, { createContext, useState, useContext } from "react";
+import { FlightOfferResponse } from "./types";
 
 const FlightContext = createContext<{
   flightData: FlightOfferResponse | null;
   setFlightData: (data: FlightOfferResponse) => void;
 } | null>(null);
 
-export const FlightProvider =  ({ children }: { children: React.ReactNode }) => {
-  const [flightData, setFlightData] = useState<FlightOfferResponse | null>(null);
+export const FlightProvider = ({ children }: { children: React.ReactNode }) => {
+  const [flightData, setFlightData] = useState<FlightOfferResponse | null>(
+    null
+  );
 
   return (
     <FlightContext.Provider value={{ flightData, setFlightData }}>
