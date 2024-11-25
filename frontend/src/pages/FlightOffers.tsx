@@ -1,6 +1,7 @@
 import { Container } from "@mui/material";
 import { Navbar } from "../components/navbar/AppBar";
 import { useFlightContext } from "../context/flightOffers/FlightsContext";
+import { BackButton } from "../components/offers/BackButton";
 
 export const FlightOffers = () => {
   const { flightData } = useFlightContext();
@@ -18,7 +19,7 @@ export const FlightOffers = () => {
           justifyContent: "flex-start",
         }}
       >
-        
+        <BackButton to="/" label="Return to Search" />
       </Container>
     </>
   );
