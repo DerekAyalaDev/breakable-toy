@@ -1,6 +1,6 @@
 import { NavigateFunction } from "react-router-dom";
 import { SearchContextState } from "../../../context/search/types";
-import { fetchFlightOffers } from "./api";
+import { fetchFlightOffers } from "../../../apis/fetchFlightOffers";
 import { FlightOfferResponse } from "../../../context/flightOffers/types";
 
 export const handleSearch = async (

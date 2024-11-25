@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { fetchAirports } from "./api";
+import { fetchAirports } from "../../../apis/fetchAirports";
 import { AirportInfo } from "./types";
 
 export const handleInputChange = async (

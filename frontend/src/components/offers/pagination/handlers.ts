@@ -1,4 +1,4 @@
-import { fetchFlightOffers } from "../../search/searchForm/api";
+import { fetchFlightOffers } from "../../../apis/fetchFlightOffers";
 import { SearchContextState } from "../../../context/search/types";
 import { FlightOfferResponse } from "../../../context/flightOffers/types";
 

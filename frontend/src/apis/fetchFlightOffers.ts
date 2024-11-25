@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SearchContextState } from "../../../context/search/types";
+import { SearchContextState } from "../context/search/types";
 
 export const fetchFlightOffers = async (searchValues: Partial<SearchContextState>) => {
   const {

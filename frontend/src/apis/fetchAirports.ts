@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AirportInfo } from "./types";
+import { AirportInfo } from "../components/search/airportInput/types";
 
 export const fetchAirports = async (keyword: string): Promise<AirportInfo[]> => {
   if (!keyword.trim()) return [];
