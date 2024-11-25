@@ -8,6 +8,7 @@ import { SearchButton } from "../SearchButton";
 import { NumberOfAdultsSelector } from "../NumberOfAdultsSelector/NumberOfAdultsSelector";
 import { useSearchContext } from "../../../context/search/SearchContext";
 import { handleSearch } from "./handlers";
+import { useNavigate } from "react-router-dom";
 
 export const SearchForm = () => {
   const {
@@ -19,31 +20,24 @@ export const SearchForm = () => {
     numberOfAdults,
     nonStop,
     setSearchValues,
-    pageNumber,
-    sortByPrice,
-    sortByDuration
   } = useSearchContext();
 
-  const handleFormSubmit = async () => {
-    const searchValues = {
-      departureAirport,
-      arrivalAirport,
-      departureDate,
-      arrivalDate,
-      currency,
-      numberOfAdults,
-      nonStop,
-      pageNumber,
-      sortByPrice,
-      sortByDuration,
-    };
-
-    await handleSearch(searchValues);
-  };
+  const navigate = useNavigate();
 
   return (
     <Box
       component="form"
+      onSubmit={(event) =>
+        handleSearch(event, {
+          departureAirport,
+          arrivalAirport,
+          departureDate,
+          arrivalDate,
+          currency,
+          numberOfAdults,
+          nonStop,
+        }, navigate)
+      }
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -88,7 +82,7 @@ export const SearchForm = () => {
         checked={nonStop}
         onCheckedChange={(value) => setSearchValues("nonStop", value)}
       />
-      <SearchButton onSubmit={handleFormSubmit} />
+      <SearchButton />
     </Box>
   );
 };
