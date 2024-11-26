@@ -5,19 +5,32 @@ interface SegmentProps {
   segmentId: string;
   segmentNumber: number;
   type: "outbound" | "return"; // 'outbound' for departure, 'return' for the return flight
+  departureAirport: string;
+  arrivalAirport: string;
+  departureTime: string;
+  arrivalTime: string;
+  duration: string;
+  airlineCode: string;
+  flightNumber: string;
   aircraftCode: string;
   cabin: string;
   fareClass: string;
 }
 
-export const Segment: React.FC<SegmentProps> = ({
-  segmentId,
+export const Segment = ({
   segmentNumber,
   type,
+  departureAirport,
+  arrivalAirport,
+  departureTime,
+  arrivalTime,
+  duration,
+  airlineCode,
+  flightNumber,
   aircraftCode,
   cabin,
   fareClass,
-}) => {
+}: SegmentProps) => {
   return (
     <Box
       sx={{
@@ -37,12 +50,72 @@ export const Segment: React.FC<SegmentProps> = ({
           flex: 2,
         }}
       >
+        {/* Segment Number and Type */}
         <Typography variant="h6" fontWeight={600}>
-          Segment {segmentNumber} ({type === "outbound" ? "Outbound" : "Return"})
+          Segment {segmentNumber} ({type === "outbound" ? "Outbound" : "Return"}
+          )
         </Typography>
-        {/* Placeholder for future details */}
-        <Typography variant="body2" color="text.secondary">
-          More information about this segment will go here.
+
+        {/* Airport Codes */}
+        <Typography variant="body1" fontWeight={600}>
+          {departureAirport} → {arrivalAirport}
+        </Typography>
+
+        {/* Dates */}
+        <Typography
+          variant="body2"
+          sx={{ color: "text.secondary", marginTop: "0.5rem" }}
+        >
+          <strong>Departure:</strong>{" "}
+          {new Date(departureTime).toLocaleString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+          })}
+        </Typography>
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+          <strong>Arrival:</strong>{" "}
+          {new Date(arrivalTime).toLocaleString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+          })}
+        </Typography>
+
+        {/* Duration */}
+        <Typography
+          variant="body2"
+          sx={{ marginTop: "0.5rem", color: "text.secondary" }}
+        >
+          <strong>Duration:</strong>{" "}
+          <Box component="span" sx={{ fontWeight: 400 }}>
+            {duration}
+          </Box>
+        </Typography>
+
+        {/* Airline Code */}
+        <Typography
+          variant="body2"
+          sx={{ marginTop: "0.5rem", color: "text.secondary" }}
+        >
+          <strong>Airline:</strong>{" "}
+          <Box component="span" sx={{ fontWeight: 400 }}>
+            {airlineCode}
+          </Box>
+        </Typography>
+
+        {/* Flight Number */}
+        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+          <strong>Flight Number:</strong>{" "}
+          <Box component="span" sx={{ fontWeight: 400 }}>
+            {flightNumber}
+          </Box>
         </Typography>
       </Box>
 

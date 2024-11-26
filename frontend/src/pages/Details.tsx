@@ -71,6 +71,13 @@ export const Details = () => {
                       type={
                         selectedOffer.itineraries.length > 1 ? type : "outbound"
                       }
+                      departureAirport={segment.departure.iataCode}
+                      arrivalAirport={segment.arrival.iataCode}
+                      departureTime={new Date(segment.departure.at).toLocaleString()}
+                      arrivalTime={new Date(segment.arrival.at).toLocaleString()}
+                      duration={segment.duration.replace("PT", "").toLowerCase()} // Format ISO duration
+                      airlineCode={segment.carrierCode}
+                      flightNumber={segment.number}
                       aircraftCode={segment.aircraft.code}
                       cabin={fareDetails?.cabin || "N/A"}
                       fareClass={fareDetails?.class || "N/A"}
