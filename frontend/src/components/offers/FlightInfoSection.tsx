@@ -5,23 +5,31 @@ import dayjs from "dayjs";
 
 interface FlightInfoSectionProps {
   itinerary: Itinerary;
+  isReturn?: boolean;
 }
 
-export const FlightInfoSection = ({ itinerary }: FlightInfoSectionProps) => {
+export const FlightInfoSection = ({
+  itinerary,
+  isReturn = false,
+}: FlightInfoSectionProps) => {
   const { departureAirport, arrivalAirport } = useSearchContext();
   const { segments, duration } = itinerary;
+
+  // Invertir aeropuertos si es vuelo de regreso
+  const departure = isReturn ? arrivalAirport : departureAirport;
+  const arrival = isReturn ? departureAirport : arrivalAirport;
 
   const departureTime = segments[0].departure.at;
   const arrivalTime = segments[segments.length - 1].arrival.at;
 
-  const departureAirportInfo = `${departureAirport?.name} (${departureAirport?.iataCode})`;
-  const arrivalAirportInfo = `${arrivalAirport?.name} (${arrivalAirport?.iataCode})`;
+  const departureAirportInfo = `${departure?.name} (${departure?.iataCode})`;
+  const arrivalAirportInfo = `${arrival?.name} (${arrival?.iataCode})`;
 
   const airlines = Array.from(
     new Set(
       segments.map(
         (segment) =>
-          `${segment.carrierName} (${segment.carrierCode})${
+          `${segment.carrierName || "Unknown"} (${segment.carrierCode})${
             segment.operating?.carrierName &&
             segment.operating.carrierName !== segment.carrierName
               ? `, ${segment.operating.carrierName} (${segment.operating.carrierCode})`
@@ -115,7 +123,7 @@ const calculateLayoverTime = (
 
 const formatDuration = (isoDuration: string): string => {
   const match = isoDuration.match(/PT(\d+H)?(\d+M)?/);
-  if (!match) return isoDuration; // Si no coincide con el formato esperado, retornar tal cual
+  if (!match) return isoDuration;
 
   const hours = match[1] ? match[1].replace("H", "") : "0";
   const minutes = match[2] ? match[2].replace("M", "") : "0";

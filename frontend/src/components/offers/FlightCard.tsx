@@ -40,7 +40,7 @@ export const FlightCard = ({ offer }: FlightCardProps) => {
         {itineraries.length > 1 && <Divider sx={{ marginY: "1rem" }} />}
 
         {itineraries.length > 1 && (
-          <FlightInfoSection itinerary={itineraries[1]} />
+          <FlightInfoSection itinerary={itineraries[1]} isReturn/>
         )}
 
         <ViewDetailsButton offer={offer} key={offer.id}/>
