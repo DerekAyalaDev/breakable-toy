@@ -38,7 +38,7 @@ export const AirportInput = ({
             ? option.iataCode === value
             : option.iataCode === value?.iataCode
         }
-        onInputChange={(event, value) => {
+        onInputChange={(_, value) => {
           if (
             airport &&
             typeof airport === "object" &&
@@ -53,7 +53,7 @@ export const AirportInput = ({
             typeof airport === "object" ? airport : null
           );
         }}
-        onChange={(event, newValue) =>
+        onChange={(_, newValue) =>
           onAirportChange(
             newValue && typeof newValue !== "string" ? newValue : null
           )
