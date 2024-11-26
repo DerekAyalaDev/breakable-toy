@@ -26,6 +26,8 @@ export const PriceDetails = ({
         flexDirection: 'column',
         gap: '1rem',
         backgroundColor: '#fff',
+        maxHeight: "280px",
+        justifyContent: "center"
       }}
     >
       {/* Price Breakdown */}
