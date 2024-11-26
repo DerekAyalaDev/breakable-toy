@@ -9,6 +9,7 @@ public class Segment {
     private FlightEndPoint departure;
     private FlightEndPoint arrival;
     private String carrierCode;
+    private String carrierName;
     private String number;
     private Aircraft aircraft;
     private OperatingFlight operating;

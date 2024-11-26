@@ -10,4 +10,5 @@ import lombok.Setter;
 public class OperatingFlight {
     @JsonProperty("carrierCode")
     private String carrierCode; // Code of the operating airline
+    private String carrierName;
 }
