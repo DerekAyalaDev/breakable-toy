@@ -9,16 +9,10 @@ export const handlePageChange = async (
   setSearchValues: (key: keyof SearchContextState, value: any) => void,
   setFlightData: (data: FlightOfferResponse) => void
 ) => {
+  if (pageNumber === currentPage) return;
+  setSearchValues("pageNumber", pageNumber);
   try {
-    if (pageNumber === currentPage) {
-      console.log("Page already selected, skipping fetch.");
-      return;
-    }
-
-    setSearchValues("pageNumber", pageNumber);
-
     const response = await fetchFlightOffers({ ...searchValues, pageNumber });
-
     setFlightData(response);
   } catch (error) {
     console.error("Error while fetching flight offers:", error);

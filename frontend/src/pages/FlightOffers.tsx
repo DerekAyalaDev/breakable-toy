@@ -5,13 +5,31 @@ import { BackButton } from "../components/offers/BackButton";
 import { handlePageChange } from "../components/offers/pagination/handlers";
 import { useSearchContext } from "../context/search/SearchContext";
 import { Pagination } from "../components/offers/pagination/Pagination";
+import { useEffect } from "react";
+import { fetchFlightOffers } from "../apis/fetchFlightOffers";
 
 export const FlightOffers = () => {
   const { flightData, setFlightData } = useFlightContext();
   const { pageNumber, setSearchValues, ...searchValues } = useSearchContext();
 
+  useEffect(() => {
+    if (!flightData) {
+      fetchFlightOffers(searchValues)
+        .then((data) => setFlightData(data))
+        .catch((error) =>
+          console.error("Error fetching flight offers on initial load:", error)
+        );
+    }
+  }, [flightData, searchValues, setFlightData]);
+
   const onPageChange = async (page: number) => {
-    await handlePageChange(page, pageNumber, searchValues, setSearchValues, setFlightData);
+    await handlePageChange(
+      page,
+      pageNumber,
+      searchValues,
+      setSearchValues,
+      setFlightData
+    );
   };
 
   return (
