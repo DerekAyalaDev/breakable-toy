@@ -5,10 +5,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.encora.searchflights.model.airline.AirlineInfo;
-import com.encora.searchflights.model.flights.*;
-import com.encora.searchflights.service.AirlineService;
-import com.encora.searchflights.service.AirportService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -17,10 +13,11 @@ import com.encora.searchflights.config.WebClientConfig;
 import com.encora.searchflights.exception.InvalidReturnDateException;
 import com.encora.searchflights.model.dto.FlightOfferResponseDTO;
 import com.encora.searchflights.model.dto.FlightSearchRequestDTO;
+import com.encora.searchflights.model.flights.FlightOffer;
+import com.encora.searchflights.model.flights.FlightOfferResponse;
 import com.encora.searchflights.service.FlightService;
 
 import lombok.AllArgsConstructor;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -28,8 +25,6 @@ import reactor.core.publisher.Mono;
 public class FlightServiceImpl implements FlightService {
     private final WebClient webClient;
     private final WebClientConfig webClientConfig;
-    private final AirportService airportService;
-    private final AirlineService airlineService;
 
     @Override
     public Mono<FlightOfferResponseDTO> searchFlights(FlightSearchRequestDTO request) {
@@ -38,9 +33,11 @@ public class FlightServiceImpl implements FlightService {
             return Mono.error(new InvalidReturnDateException("Return date cannot be earlier than departure date."));
         }
 
+        // Fetch flight offers asynchronously and then sort and paginate the results
         return fetchFlightOffers(request)
-                .map(flightOffers -> sortFlightOffers(flightOffers, request.isSortByPrice(), request.isSortByDuration()))
-                .flatMap(sortedOffers -> createPaginatedResponse(sortedOffers, request.getPageNumber(), 10));
+                .map(flightOffers -> sortFlightOffers(flightOffers, request.isSortByPrice(),
+                        request.isSortByDuration()))
+                .map(sortedOffers -> createPaginatedResponse(sortedOffers, request.getPageNumber(), 10));
     }
 
     /**
@@ -107,20 +104,17 @@ public class FlightServiceImpl implements FlightService {
      * @param pageSize     the number of offers per page.
      * @return a response DTO with paginated flight offers and the total page count.
      */
-    private Mono<FlightOfferResponseDTO> createPaginatedResponse(List<FlightOffer> sortedOffers, int pageNumber,
+    private FlightOfferResponseDTO createPaginatedResponse(List<FlightOffer> sortedOffers, int pageNumber,
             int pageSize) {
         int totalPages = (int) Math.ceil((double) sortedOffers.size() / pageSize);
         int start = (pageNumber - 1) * pageSize;
         int end = Math.min(start + pageSize, sortedOffers.size());
         List<FlightOffer> paginatedOffers = sortedOffers.subList(start, end);
 
-        return enrichFlightOffers(paginatedOffers)
-                .map(enrichedOffers -> {
-                    FlightOfferResponseDTO response = new FlightOfferResponseDTO();
-                    response.setOffers(enrichedOffers);
-                    response.setTotalPages(totalPages);
-                    return response;
-                });
+        FlightOfferResponseDTO response = new FlightOfferResponseDTO();
+        response.setOffers(paginatedOffers);
+        response.setTotalPages(totalPages);
+        return response;
     }
 
     /**
@@ -134,61 +128,5 @@ public class FlightServiceImpl implements FlightService {
         return offer.getItineraries().stream()
                 .map(itinerary -> Duration.parse(itinerary.getDuration()))
                 .reduce(Duration.ZERO, Duration::plus);
-    }
-
-    private Mono<List<FlightOffer>> enrichFlightOffers(List<FlightOffer> offers) {
-        return Flux.fromIterable(offers)
-                .flatMap(this::enrichFlightOffer)
-                .collectList();
-    }
-
-    private Mono<FlightOffer> enrichFlightOffer(FlightOffer offer) {
-        return Flux.fromIterable(offer.getItineraries())
-                .flatMap(this::enrichItinerary)
-                .collectList()
-                .map(enrichedItineraries -> {
-                    offer.setItineraries(enrichedItineraries);
-                    return offer;
-                });
-    }
-
-    private Mono<Itinerary> enrichItinerary(Itinerary itinerary) {
-        return Flux.fromIterable(itinerary.getSegments())
-                .flatMap(this::enrichSegment)
-                .collectList()
-                .map(enrichedSegments -> {
-                    itinerary.setSegments(enrichedSegments);
-                    return itinerary;
-                });
-    }
-
-    private Mono<Segment> enrichSegment(Segment segment) {
-        // Si el carrierCode y el operatingCarrierCode son iguales, hacemos una sola llamada
-        if (segment.getCarrierCode().equals(segment.getOperating().getCarrierCode())) {
-            return airlineService.getAirlineInfo(segment.getCarrierCode())
-                    .map(AirlineInfo::getName)
-                    .map(carrierName -> {
-                        // Usamos el mismo nombre para ambos
-                        segment.setCarrierName(carrierName);
-                        segment.getOperating().setCarrierName(carrierName);
-                        return segment;
-                    });
-        } else {
-            // Hacemos llamadas separadas si los códigos son diferentes
-            Mono<String> carrierNameMono = airlineService.getAirlineInfo(segment.getCarrierCode())
-                    .map(AirlineInfo::getName)
-                    .defaultIfEmpty("");
-
-            Mono<String> operatingCarrierNameMono = airlineService.getAirlineInfo(segment.getOperating().getCarrierCode())
-                    .map(AirlineInfo::getName)
-                    .defaultIfEmpty("");
-
-            return Mono.zip(carrierNameMono, operatingCarrierNameMono)
-                    .map(tuple -> {
-                        segment.setCarrierName(tuple.getT1());
-                        segment.getOperating().setCarrierName(tuple.getT2());
-                        return segment;
-                    });
-        }
     }
 }
