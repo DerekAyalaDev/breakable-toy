@@ -20,23 +20,25 @@ public class AirlineServiceImpl implements AirlineService {
 
     @Override
     public Mono<AirlineInfo> getAirlineInfo(String airlineCode) {
-        String token = webClientConfig.getAccessToken().block();
-
-        return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/v1/reference-data/airlines")
-                        .queryParam("airlineCodes", airlineCode)
-                        .build())
-                .header("Authorization", "Bearer " + token)
-                .retrieve()
-                .onStatus(status -> status.equals(HttpStatus.NOT_FOUND) || status.is4xxClientError(),
-                        clientResponse -> Mono.empty())
-                .bodyToMono(AirlineResponse.class)
-                .flatMap(response -> {
-                    if (response.getData() != null && !response.getData().isEmpty()) {
-                        return Mono.just(response.getData().get(0));
-                    }
-                    return Mono.empty();
-                });
+        return webClientConfig.getAccessToken()
+                .flatMap(token -> webClient.get()
+                        .uri(uriBuilder -> uriBuilder
+                                .path("/v1/reference-data/airlines")
+                                .queryParam("airlineCodes", airlineCode)
+                                .build())
+                        .header("Authorization", "Bearer " + token)
+                        .retrieve()
+                        .onStatus(
+                                status -> status.equals(HttpStatus.NOT_FOUND) || status.is4xxClientError(),
+                                clientResponse -> Mono.empty()
+                        )
+                        .bodyToMono(AirlineResponse.class)
+                        .flatMap(response -> {
+                            if (response.getData() != null && !response.getData().isEmpty()) {
+                                return Mono.just(response.getData().get(0));
+                            }
+                            return Mono.empty();
+                        })
+                );
     }
 }
