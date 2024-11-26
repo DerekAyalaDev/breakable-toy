@@ -43,9 +43,7 @@ export const FlightCard = ({ offer }: FlightCardProps) => {
           <FlightInfoSection itinerary={itineraries[1]} />
         )}
 
-        <ViewDetailsButton
-          onClick={() => console.log(`Viewing details for offer: ${offer.id}`)}
-        />
+        <ViewDetailsButton offer={offer} key={offer.id}/>
       </Box>
 
       <PriceSection

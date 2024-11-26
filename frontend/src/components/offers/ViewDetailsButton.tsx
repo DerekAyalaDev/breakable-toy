@@ -1,10 +1,21 @@
 import { Box, Button } from "@mui/material";
+import { FlightOffer } from "../../context/flightOffers/types";
+import { useSelectedOfferContext } from "../../context/selectedOffer/SelectedOfferContext";
+import { useNavigate } from "react-router-dom";
 
 interface ViewDetailsButtonProps {
-  onClick?: () => void; // Prop opcional para manejar acciones al hacer clic
+  offer: FlightOffer;
 }
 
-export const ViewDetailsButton = ({ onClick }: ViewDetailsButtonProps) => {
+export const ViewDetailsButton = ({ offer }: ViewDetailsButtonProps) => {
+  const { setSelectedOffer } = useSelectedOfferContext();
+  const navigate = useNavigate();
+
+  const handleViewDetails = () => {
+    setSelectedOffer(offer);
+    navigate("/details");
+  };
+
   return (
     <Box
       sx={{
@@ -14,8 +25,8 @@ export const ViewDetailsButton = ({ onClick }: ViewDetailsButtonProps) => {
       }}
     >
       <Button
+        onClick={handleViewDetails}
         variant="contained"
-        onClick={onClick}
         sx={{
           backgroundColor: "var(--primary-color)",
           color: "#FFFFFF",

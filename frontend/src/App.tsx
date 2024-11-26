@@ -1,12 +1,15 @@
 import { FlightProvider } from "./context/flightOffers/FlightsContext";
 import { SearchProvider } from "./context/search/SearchContext";
+import { SelectedOfferProvider } from "./context/selectedOffer/SelectedOfferContext";
 import AppRouter from "./router/AppRouter";
 
 export const App = () => {
   return (
     <SearchProvider>
       <FlightProvider>
-        <AppRouter />
+        <SelectedOfferProvider>
+          <AppRouter />
+        </SelectedOfferProvider>
       </FlightProvider>
     </SearchProvider>
   );
