@@ -7,25 +7,14 @@ export const handleSearch = async (
   event: React.FormEvent<HTMLFormElement>,
   searchValues: Partial<SearchContextState>,
   setFlightData: (data: FlightOfferResponse) => void,
-  navigate: NavigateFunction
+  navigate: NavigateFunction,
+  validateInputs: () => boolean
 ) => {
   event.preventDefault();
 
-  if (!searchValues.departureAirport || !searchValues.arrivalAirport) {
-    console.error("Both departure and arrival airports must be selected.");
-    return;
-  }
-
-  if (!searchValues.departureDate) {
-    console.error("Departure date must be selected.");
-    return;
-  }
-
-  if (
-    searchValues.arrivalDate &&
-    searchValues.departureDate.isAfter(searchValues.arrivalDate)
-  ) {
-    console.error("Arrival date must be after departure date.");
+  // Validate inputs before proceeding
+  if (!validateInputs()) {
+    console.error("Validation failed. Please correct the highlighted fields.");
     return;
   }
 

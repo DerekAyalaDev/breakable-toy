@@ -9,7 +9,9 @@ export const AirportInput = ({
   icon,
   airport,
   onAirportChange,
-}: AirportInputProps) => {
+  error,
+  helperText,
+}: AirportInputProps & { error?: boolean; helperText?: string }) => {
   const [options, setOptions] = useState<AirportInfo[]>([]);
 
   return (
@@ -60,6 +62,8 @@ export const AirportInput = ({
           <TextField
             {...params}
             label={label.split(" ")[0]}
+            error={error} // Pass error state
+            helperText={helperText} // Pass helper text
             InputProps={{
               ...params.InputProps,
               startAdornment: (

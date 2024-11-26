@@ -5,9 +5,16 @@ import { FormLabel } from "../FormLabel";
 import dayjs from "dayjs";
 import { DateInputProps } from "./types";
 
-export const DateInput = ({ label, date, onDateChange }: DateInputProps) => {
+export const DateInput = ({
+  label,
+  date,
+  onDateChange,
+  error,
+  helperText,
+}: DateInputProps & { error?: boolean; helperText?: string }) => {
   const minDate = dayjs();
   const maxDate = dayjs().add(2, "year");
+
   return (
     <Box
       sx={{
@@ -31,6 +38,8 @@ export const DateInput = ({ label, date, onDateChange }: DateInputProps) => {
             textField: {
               variant: "outlined",
               fullWidth: true,
+              error: error, // Add error state
+              helperText: helperText, // Add helperText
               InputProps: {
                 sx: {
                   "& .MuiSvgIcon-root": {
