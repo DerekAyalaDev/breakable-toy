@@ -8,6 +8,7 @@ import { Pagination } from "../components/offers/pagination/Pagination";
 import { useEffect } from "react";
 import { fetchFlightOffers } from "../apis/fetchFlightOffers";
 import { FlightCard } from "../components/offers/FlightCard";
+import { SortCheckbox } from "../components/offers/SortCheckbox";
 
 export const FlightOffers = () => {
   const { flightData, setFlightData } = useFlightContext();
@@ -46,7 +47,23 @@ export const FlightOffers = () => {
           justifyContent: "flex-start",
         }}
       >
-        <BackButton to="/" label="Return to Search" />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "1rem",
+          }}
+        >
+          <BackButton to="/" label="Return to Search" />
+          <Box sx={{ display: "flex", gap: "1rem" }}>
+            <SortCheckbox label="Sort by Price" contextKey="sortByPrice" />
+            <SortCheckbox
+              label="Sort by Duration"
+              contextKey="sortByDuration"
+            />
+          </Box>
+        </Box>
         {flightData ? (
           <>
             {/* Lista de FlightCards */}
