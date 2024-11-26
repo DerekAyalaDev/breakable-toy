@@ -9,7 +9,7 @@ export interface FlightOffer {
   itineraries: Itinerary[];
   price: Price;
   pricingOptions: PricingOptions;
-  travelerPricings: TravelerPricing;
+  travelerPricings: TravelerPricing[];
 }
 
 export interface Itinerary {
@@ -21,6 +21,7 @@ export interface Segment {
   departure: FlightEndPoint;
   arrival: FlightEndPoint;
   carrierCode: string;
+  carrierName: string;
   number: string;
   aircraft: Aircraft;
   operating: OperatingFlight;
@@ -35,6 +36,7 @@ export interface Aircraft {
 
 export interface OperatingFlight {
   carrierCode: String;
+  carrierName: string;
 }
 
 export interface FlightEndPoint {

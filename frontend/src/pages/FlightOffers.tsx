@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { Navbar } from "../components/navbar/AppBar";
 import { useFlightContext } from "../context/flightOffers/FlightsContext";
 import { BackButton } from "../components/offers/BackButton";
@@ -7,6 +7,7 @@ import { useSearchContext } from "../context/search/SearchContext";
 import { Pagination } from "../components/offers/pagination/Pagination";
 import { useEffect } from "react";
 import { fetchFlightOffers } from "../apis/fetchFlightOffers";
+import { FlightCard } from "../components/offers/FlightCard";
 
 export const FlightOffers = () => {
   const { flightData, setFlightData } = useFlightContext();
@@ -46,12 +47,28 @@ export const FlightOffers = () => {
         }}
       >
         <BackButton to="/" label="Return to Search" />
-        {flightData && flightData.totalPages > 1 && (
-          <Pagination
-            totalPages={flightData.totalPages}
-            currentPage={pageNumber}
-            onPageChange={onPageChange}
-          />
+        {flightData ? (
+          <>
+            {/* Lista de FlightCards */}
+            {flightData.offers.map((offer, index) => (
+              <FlightCard key={index} offer={offer} />
+            ))}
+
+            {/* Paginación */}
+            {flightData.totalPages > 1 && (
+              <Pagination
+                totalPages={flightData.totalPages}
+                currentPage={pageNumber}
+                onPageChange={onPageChange}
+              />
+            )}
+          </>
+        ) : (
+          <Box sx={{ textAlign: "center", marginTop: "2rem" }}>
+            <Typography variant="h6" color="text.secondary">
+              No flight offers found.
+            </Typography>
+          </Box>
         )}
       </Container>
     </>
