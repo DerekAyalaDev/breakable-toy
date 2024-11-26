@@ -8,21 +8,30 @@ export const handleSearch = async (
   searchValues: Partial<SearchContextState>,
   setFlightData: (data: FlightOfferResponse) => void,
   navigate: NavigateFunction,
-  validateInputs: () => boolean
+  validateInputs: () => boolean,
+  setAlertMessage: (message: string | null) => void // Add alert message handler
 ) => {
   event.preventDefault();
 
   // Validate inputs before proceeding
   if (!validateInputs()) {
-    console.error("Validation failed. Please correct the highlighted fields.");
+    setAlertMessage("Please correct the highlighted fields before searching.");
     return;
   }
 
   try {
     const response = await fetchFlightOffers(searchValues);
+
+    if (!response.offers || response.offers.length === 0) {
+      // Show alert if no offers are found
+      setAlertMessage("No flight offers found for the selected criteria.");
+      return;
+    }
+
     setFlightData(response);
     navigate("/offers");
   } catch (error) {
     console.error("Error during flight search:", error);
+    setAlertMessage("An error occurred while searching for flights. Please try again.");
   }
 };

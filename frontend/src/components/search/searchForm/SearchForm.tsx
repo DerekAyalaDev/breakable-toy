@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Alert, Box } from "@mui/material";
 import { AirportInput } from "../airportInput/AirportInput";
 import { FlightLand, FlightTakeoff } from "@mui/icons-material";
 import { DateInput } from "../dateInput/DateInput";
@@ -27,6 +27,8 @@ export const SearchForm = () => {
 
   const { setFlightData } = useFlightContext();
   const navigate = useNavigate();
+
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
   const [errors, setErrors] = useState({
     departureAirport: false,
@@ -74,7 +76,8 @@ export const SearchForm = () => {
           },
           setFlightData,
           navigate,
-          validateInputs
+          validateInputs,
+          setAlertMessage
         )
       }
       sx={{
@@ -84,6 +87,18 @@ export const SearchForm = () => {
         width: "100%",
       }}
     >
+      {/* Display Alert */}
+      {alertMessage && (
+        <Alert
+          severity="warning"
+          onClose={() => setAlertMessage(null)}
+          sx={{
+            marginBottom: "1rem",
+          }}
+        >
+          {alertMessage}
+        </Alert>
+      )}
       <AirportInput
         label="Departure Airport"
         airport={departureAirport}
