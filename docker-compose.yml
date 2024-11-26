@@ -1,0 +1,20 @@
+services:
+  backend:
+    image: backend-image:latest
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "9090:9090"
+
+  frontend:
+    image: frontend-image:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
