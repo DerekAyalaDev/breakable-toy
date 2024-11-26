@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { SearchContextProps, SearchContextState } from "./types";
+import dayjs from "dayjs";
 
 const SearchContext = createContext<SearchContextProps | null>(null);
 
@@ -8,8 +9,18 @@ const LOCAL_STORAGE_KEY = 'searchContext';
 export const SearchProvider = ({ children }: { children: React.ReactNode }) => {
   const loadInitialState = (): SearchContextState => {
     const savedState = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return savedState
-      ? JSON.parse(savedState)
+    const parsedState = savedState ? JSON.parse(savedState) : null;
+
+    return parsedState
+      ? {
+          ...parsedState,
+          departureDate: parsedState.departureDate
+            ? dayjs(parsedState.departureDate)
+            : null,
+          arrivalDate: parsedState.arrivalDate
+            ? dayjs(parsedState.arrivalDate)
+            : null,
+        }
       : {
           departureAirport: null,
           arrivalAirport: null,
