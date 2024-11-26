@@ -3,16 +3,10 @@ import { PaginationProps } from "./types";
 
 export const Pagination = ({ totalPages, currentPage, onPageChange }: PaginationProps) => {
   const getPageNumbers = () => {
-    const maxButtons = 5;
     const pages = [];
-
-    const start = Math.max(1, currentPage - Math.floor(maxButtons / 2));
-    const end = Math.min(totalPages, start + maxButtons - 1);
-
-    for (let i = start; i <= end; i++) {
+    for (let i = 1; i <= totalPages; i++) {
       pages.push(i);
     }
-
     return pages;
   };
 

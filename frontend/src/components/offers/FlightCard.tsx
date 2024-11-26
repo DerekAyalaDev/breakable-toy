@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Typography } from "@mui/material";
+import { Box, Divider } from "@mui/material";
 import { FlightOffer } from "../../context/flightOffers/types";
 import { FlightInfoSection } from "./FlightInfoSection";
 import { PriceSection } from "./PriceSection";
