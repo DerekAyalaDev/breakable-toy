@@ -15,6 +15,8 @@ import reactor.core.publisher.Mono;
 public class WebClientConfig {
 
     private final Dotenv dotenv = Dotenv.load();
+    private volatile String cachedToken;
+    private volatile long tokenExpiryTime;
 
     @Bean
     public String amadeusBaseUrl() {
@@ -44,7 +46,11 @@ public class WebClientConfig {
                 .build();
     }
 
-    public Mono<String> getAccessToken() {
+    public synchronized Mono<String> getAccessToken() {
+        if (cachedToken != null && System.currentTimeMillis() < tokenExpiryTime) {
+            return Mono.just(cachedToken);
+        }
+
         return WebClient.builder()
                 .baseUrl(amadeusTokenUrl())
                 .build()
@@ -55,6 +61,10 @@ public class WebClientConfig {
                         .with("client_secret", apiSecret()))
                 .retrieve()
                 .bodyToMono(TokenResponse.class)
-                .map(TokenResponse::getAccessToken);
+                .map(tokenResponse -> {
+                    cachedToken = tokenResponse.getAccessToken();
+                    tokenExpiryTime = System.currentTimeMillis() + (tokenResponse.getExpiresIn() * 1000L);
+                    return cachedToken;
+                });
     }
 }
