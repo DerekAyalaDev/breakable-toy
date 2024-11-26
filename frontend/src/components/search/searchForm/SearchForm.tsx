@@ -10,7 +10,7 @@ import { useSearchContext } from "../../../context/search/SearchContext";
 import { handleSearch } from "./handlers";
 import { useNavigate } from "react-router-dom";
 import { useFlightContext } from "../../../context/flightOffers/FlightsContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 export const SearchForm = () => {
@@ -44,20 +44,30 @@ export const SearchForm = () => {
     const newErrors = {
       departureAirport: !departureAirport,
       arrivalAirport: !arrivalAirport,
-      departureDate: !departureDate || !departureDate.isValid() || departureDate.isBefore(today),
+      departureDate:
+        !departureDate ||
+        !departureDate.isValid() ||
+        departureDate.isBefore(today),
       arrivalDate: arrivalDate
-        ? !arrivalDate.isValid() || (departureDate && arrivalDate.isBefore(departureDate))
+        ? !arrivalDate.isValid() ||
+          (departureDate && arrivalDate.isBefore(departureDate))
         : false, // Ensure a boolean value is used
       currency: !currency,
     };
 
     setErrors({
       ...newErrors,
-      arrivalDate: Boolean(newErrors.arrivalDate), // Explicitly cast to boolean
+      arrivalDate: Boolean(newErrors.arrivalDate),
     });
 
     return !Object.values(newErrors).some((error) => error);
   };
+
+  useEffect(() => {
+    setSearchValues("pageNumber", 1);
+    setSearchValues("sortByPrice", false);
+    setSearchValues("sortByDuration", false);
+  }, [setSearchValues]);
 
   return (
     <Box
@@ -102,32 +112,52 @@ export const SearchForm = () => {
       <AirportInput
         label="Departure Airport"
         airport={departureAirport}
-        onAirportChange={(airport) => setSearchValues("departureAirport", airport)}
+        onAirportChange={(airport) =>
+          setSearchValues("departureAirport", airport)
+        }
         icon={<FlightTakeoff />}
         error={errors.departureAirport}
-        helperText={errors.departureAirport ? "Please select a departure airport" : undefined}
+        helperText={
+          errors.departureAirport
+            ? "Please select a departure airport"
+            : undefined
+        }
       />
       <AirportInput
         label="Arrival Airport"
         airport={arrivalAirport}
-        onAirportChange={(airport) => setSearchValues("arrivalAirport", airport)}
+        onAirportChange={(airport) =>
+          setSearchValues("arrivalAirport", airport)
+        }
         icon={<FlightLand />}
         error={errors.arrivalAirport}
-        helperText={errors.departureAirport ? "Please select a arrival airport" : undefined}
+        helperText={
+          errors.departureAirport
+            ? "Please select a arrival airport"
+            : undefined
+        }
       />
       <DateInput
         label="Departure Date"
         date={departureDate}
         onDateChange={(date) => setSearchValues("departureDate", date)}
         error={errors.departureDate}
-        helperText={errors.departureDate ? "Please select a valid departure date" : undefined}
+        helperText={
+          errors.departureDate
+            ? "Please select a valid departure date"
+            : undefined
+        }
       />
       <DateInput
         label="Arrival Date"
         date={arrivalDate}
         onDateChange={(date) => setSearchValues("arrivalDate", date)}
         error={errors.arrivalDate}
-        helperText={errors.arrivalDate ? "Arrival date cannot be before departure date" : undefined}
+        helperText={
+          errors.arrivalDate
+            ? "Arrival date cannot be before departure date"
+            : undefined
+        }
       />
       <CurrencySelector
         label="Currency"
@@ -139,7 +169,9 @@ export const SearchForm = () => {
       <NumberOfAdultsSelector
         label="Adults"
         numberOfAdults={numberOfAdults}
-        onNumberOfAdultsChange={(value) => setSearchValues("numberOfAdults", value)}
+        onNumberOfAdultsChange={(value) =>
+          setSearchValues("numberOfAdults", value)
+        }
       />
       <NonStopCheckbox
         label="Non-Stop"
