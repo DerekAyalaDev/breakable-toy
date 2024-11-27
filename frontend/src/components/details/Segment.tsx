@@ -100,7 +100,7 @@ export const Segment = ({
         >
           <strong>Duration:</strong>{" "}
           <Box component="span" sx={{ fontWeight: 400 }}>
-            {duration}
+            {formatDuration(duration)}
           </Box>
         </Typography>
 
@@ -111,7 +111,8 @@ export const Segment = ({
         >
           <strong>Airline:</strong>{" "}
           <Box component="span" sx={{ fontWeight: 400 }}>
-            {airlineName}{airlineCode}
+            {airlineName}
+            {airlineCode}
           </Box>
         </Typography>
 
@@ -151,4 +152,8 @@ export const Segment = ({
       </Box>
     </Box>
   );
+};
+
+const formatDuration = (duration: string): string => {
+  return duration.replace("h", "h ");
 };
