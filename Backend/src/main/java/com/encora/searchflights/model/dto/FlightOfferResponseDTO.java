@@ -2,6 +2,7 @@ package com.encora.searchflights.model.dto;
 
 import java.util.List;
 
+import com.encora.searchflights.model.flights.Dictionaries;
 import com.encora.searchflights.model.flights.FlightOffer;
 
 import lombok.Getter;
@@ -12,4 +13,5 @@ import lombok.Setter;
 public class FlightOfferResponseDTO {
     private List<FlightOffer> offers;
     private int totalPages;
+    private Dictionaries dictionaries;
 }

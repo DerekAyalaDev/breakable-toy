@@ -28,16 +28,22 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     public Mono<FlightOfferResponseDTO> searchFlights(FlightSearchRequestDTO request) {
-        // Validate that the return date is not earlier than the departure date
         if (request.getReturnDate() != null && request.getReturnDate().isBefore(request.getDepartureDate())) {
             return Mono.error(new InvalidReturnDateException("Return date cannot be earlier than departure date."));
         }
 
-        // Fetch flight offers asynchronously and then sort and paginate the results
         return fetchFlightOffers(request)
-                .map(flightOffers -> sortFlightOffers(flightOffers, request.isSortByPrice(),
-                        request.isSortByDuration()))
-                .map(sortedOffers -> createPaginatedResponse(sortedOffers, request.getPageNumber(), 10));
+                .map(response -> {
+                    List<FlightOffer> sortedOffers = sortFlightOffers(response.getData(),
+                            request.isSortByPrice(),
+                            request.isSortByDuration());
+
+                    FlightOfferResponseDTO responseDTO = new FlightOfferResponseDTO();
+                    responseDTO.setDictionaries(response.getDictionaries());
+                    responseDTO.setOffers(getPaginatedOffers(sortedOffers, request.getPageNumber(), 10));
+                    responseDTO.setTotalPages(calculateTotalPages(sortedOffers, 10));
+                    return responseDTO;
+                });
     }
 
     /**
@@ -47,7 +53,7 @@ public class FlightServiceImpl implements FlightService {
      * @param request the search criteria including origin, destination, dates, etc.
      * @return a Mono containing a list of flight offers.
      */
-    private Mono<List<FlightOffer>> fetchFlightOffers(FlightSearchRequestDTO request) {
+    private Mono<FlightOfferResponse> fetchFlightOffers(FlightSearchRequestDTO request) {
         return webClientConfig.getAccessToken()
                 .flatMap(token -> webClient.get()
                         .uri(uriBuilder -> uriBuilder
@@ -64,8 +70,7 @@ public class FlightServiceImpl implements FlightService {
                                 .build())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                         .retrieve()
-                        .bodyToMono(FlightOfferResponse.class)
-                        .map(FlightOfferResponse::getData));
+                        .bodyToMono(FlightOfferResponse.class));
     }
 
     /**
@@ -96,25 +101,14 @@ public class FlightServiceImpl implements FlightService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Creates a paginated response DTO from a sorted list of flight offers.
-     *
-     * @param sortedOffers the sorted list of flight offers.
-     * @param pageNumber   the current page number requested.
-     * @param pageSize     the number of offers per page.
-     * @return a response DTO with paginated flight offers and the total page count.
-     */
-    private FlightOfferResponseDTO createPaginatedResponse(List<FlightOffer> sortedOffers, int pageNumber,
-            int pageSize) {
-        int totalPages = (int) Math.ceil((double) sortedOffers.size() / pageSize);
+    private List<FlightOffer> getPaginatedOffers(List<FlightOffer> sortedOffers, int pageNumber, int pageSize) {
         int start = (pageNumber - 1) * pageSize;
         int end = Math.min(start + pageSize, sortedOffers.size());
-        List<FlightOffer> paginatedOffers = sortedOffers.subList(start, end);
+        return sortedOffers.subList(start, end);
+    }
 
-        FlightOfferResponseDTO response = new FlightOfferResponseDTO();
-        response.setOffers(paginatedOffers);
-        response.setTotalPages(totalPages);
-        return response;
+    private int calculateTotalPages(List<FlightOffer> sortedOffers, int pageSize) {
+        return (int) Math.ceil((double) sortedOffers.size() / pageSize);
     }
 
     /**

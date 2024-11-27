@@ -9,4 +9,5 @@ import lombok.Setter;
 @Setter
 public class FlightOfferResponse {
     private List<FlightOffer> data;
+    private Dictionaries dictionaries;
 }
