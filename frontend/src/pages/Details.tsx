@@ -41,8 +41,7 @@ export const Details = () => {
           sx={{
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
-            gap: "2rem",
-            padding: "2rem",
+            gap: "1rem",
           }}
         >
           <Box

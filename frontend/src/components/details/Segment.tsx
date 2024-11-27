@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import { useFlightContext } from "../../context/flightOffers/FlightsContext";
 
 interface SegmentProps {
   segmentId: string;
@@ -30,6 +31,11 @@ export const Segment = ({
   cabin,
   fareClass,
 }: SegmentProps) => {
+  const { flightData } = useFlightContext();
+  const airlineName =
+    flightData?.dictionaries?.carriers?.[airlineCode] || "Unknown Airline";
+  const aircraftName =
+    flightData?.dictionaries?.aircraft?.[aircraftCode] || "Unknown Aircraft";
   return (
     <Box
       sx={{
@@ -105,7 +111,7 @@ export const Segment = ({
         >
           <strong>Airline:</strong>{" "}
           <Box component="span" sx={{ fontWeight: 400 }}>
-            {airlineCode}
+            {airlineName}{airlineCode}
           </Box>
         </Typography>
 
@@ -140,7 +146,7 @@ export const Segment = ({
           <strong>Class:</strong> {fareClass}
         </Typography>
         <Typography variant="body2">
-          <strong>Aircraft Code:</strong> {aircraftCode}
+          <strong>Aircraft:</strong> {aircraftName}
         </Typography>
       </Box>
     </Box>
