@@ -1,6 +1,14 @@
 export interface FlightOfferResponse {
   offers: FlightOffer[];
   totalPages: number;
+  dictionaries: Dictionaries;
+}
+
+export interface Dictionaries {
+  locations: Record<string, { cityCode: string; countryCode: string }>;
+  aircraft: Record<string, string>;
+  currencies: Record<string, string>;
+  carriers: Record<string, string>;
 }
 
 export interface FlightOffer {
