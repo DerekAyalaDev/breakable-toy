@@ -68,7 +68,7 @@ export const FlightOffers = () => {
           <>
             {/* Lista de FlightCards */}
             {flightData.offers.map((offer, index) => (
-              <FlightCard key={index} offer={offer} />
+              <FlightCard key={index} offer={offer} dictionaries={flightData.dictionaries}/>
             ))}
 
             {/* Paginación */}

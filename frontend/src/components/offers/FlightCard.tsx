@@ -1,14 +1,15 @@
 import { Box, Divider } from "@mui/material";
-import { FlightOffer } from "../../context/flightOffers/types";
+import { Dictionaries, FlightOffer } from "../../context/flightOffers/types";
 import { FlightInfoSection } from "./FlightInfoSection";
 import { PriceSection } from "./PriceSection";
 import { ViewDetailsButton } from "./ViewDetailsButton";
 
 interface FlightCardProps {
   offer: FlightOffer;
+  dictionaries: Dictionaries;
 }
 
-export const FlightCard = ({ offer }: FlightCardProps) => {
+export const FlightCard = ({ offer, dictionaries }: FlightCardProps) => {
   const { itineraries, price, travelerPricings } = offer;
 
   const totalPrice = `${price.total} ${price.currency}`;
@@ -35,12 +36,12 @@ export const FlightCard = ({ offer }: FlightCardProps) => {
           gap: "0.5rem",
         }}
       >
-        <FlightInfoSection itinerary={itineraries[0]} />
+        <FlightInfoSection itinerary={itineraries[0]} dictionaries={dictionaries}/>
 
         {itineraries.length > 1 && <Divider sx={{ marginY: "1rem" }} />}
 
         {itineraries.length > 1 && (
-          <FlightInfoSection itinerary={itineraries[1]} isReturn/>
+          <FlightInfoSection itinerary={itineraries[1]} dictionaries={dictionaries} isReturn/>
         )}
 
         <ViewDetailsButton offer={offer} key={offer.id}/>

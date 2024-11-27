@@ -1,16 +1,18 @@
 import { Box, Typography } from "@mui/material";
-import { Itinerary } from "../../context/flightOffers/types";
+import { Dictionaries, Itinerary } from "../../context/flightOffers/types";
 import { useSearchContext } from "../../context/search/SearchContext";
 import dayjs from "dayjs";
 
 interface FlightInfoSectionProps {
   itinerary: Itinerary;
   isReturn?: boolean;
+  dictionaries: Dictionaries;
 }
 
 export const FlightInfoSection = ({
   itinerary,
   isReturn = false,
+  dictionaries,
 }: FlightInfoSectionProps) => {
   const { departureAirport, arrivalAirport } = useSearchContext();
   const { segments, duration } = itinerary;
@@ -25,17 +27,14 @@ export const FlightInfoSection = ({
   const departureAirportInfo = `${departure?.name} (${departure?.iataCode})`;
   const arrivalAirportInfo = `${arrival?.name} (${arrival?.iataCode})`;
 
+  // Obtener nombres de aerolíneas desde dictionaries
   const airlines = Array.from(
     new Set(
-      segments.map(
-        (segment) =>
-          `${segment.carrierName || "Unknown"} (${segment.carrierCode})${
-            segment.operating?.carrierName &&
-            segment.operating.carrierName !== segment.carrierName
-              ? `, ${segment.operating.carrierName} (${segment.operating.carrierCode})`
-              : ""
-          }`
-      )
+      segments.map((segment) => {
+        const airlineName =
+          dictionaries.carriers[segment.carrierCode] || "Unknown Airline";
+        return `${airlineName} (${segment.carrierCode})`;
+      })
     )
   ).join(", ");
 
