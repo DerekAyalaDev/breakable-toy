@@ -81,13 +81,19 @@ Before proceeding, ensure you have the following installed:
    cd Backend
    ```
 
-2. Build the backend Docker image:
+2. Before building the docker image we need to create the jar file:
+
+   ```bash
+   ./gradlew build
+   ```
+
+3. Build the backend Docker image:
 
    ```bash
    docker build -t backend-image .
    ```
 
-3. Return to the root project directory:
+4. Return to the root project directory:
 
    ```bash
    cd ..
